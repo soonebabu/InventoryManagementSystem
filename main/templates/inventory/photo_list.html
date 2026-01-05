@@ -1,0 +1,118 @@
+<!-- photo_list.html -->
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="container" style="margin-bottom:200px;">
+        <div style="margin-bottom: 20px;"></div>
+
+        <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+            <div class="card-body text-center">
+              <h2 class="card-title">Photos for {{ item.name }}</h2>
+            </div>
+          </div>
+          <div style="margin-bottom: 20px;"></div>
+        {% comment %} <h1 class="mt-5 mb-4">Photos for {{ item.name }}</h1> {% endcomment %}
+        <div class="row">
+            <div class="col-md-4">
+                {% if item.additem_photo %}
+                    <div class="photo-card">
+                        <img src="{{ item.additem_photo.url }}" alt="AddItem Photo">
+                        <div class="overlay">
+                            <button class="btn btn-primary view-photo-btn" data-photo-url="{{ item.additem_photo.url }}" data-photo-type="AddItem">View AddItem Photo</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if item.returnitem_photo %}
+                    <div class="photo-card">
+                        <img src="{{ item.returnitem_photo.url }}" alt="ReturnItem Photo">
+                        <div class="overlay">
+                            <button class="btn btn-primary view-photo-btn" data-photo-url="{{ item.returnitem_photo.url }}" data-photo-type="ReturnItem">View ReturnItem Photo</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if item.changestatus_photo %}
+                    <div class="photo-card">
+                        <img src="{{ item.changestatus_photo.url }}" alt="ChangeStatus Photo">
+                        <div class="overlay">
+                            <button class="btn btn-primary view-photo-btn" data-photo-url="{{ item.changestatus_photo.url }}" data-photo-type="ChangeStatus">View ChangeStatus Photo</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Photo Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="photoModalLabel">View Photo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="photoModalImage" class="img-fluid" src="" alt="Photo">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .photo-card {
+            position: relative;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-card .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .photo-card:hover .overlay {
+            opacity: 1;
+        }
+
+        .view-photo-btn {
+            font-size: 16px;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $('.view-photo-btn').on('click', function() {
+                const photoUrl = $(this).data('photo-url');
+                const photoType = $(this).data('photo-type');
+                $('#photoModalImage').attr('src', photoUrl);
+                $('#photoModalLabel').text('View ' + photoType + ' Photo');
+                $('#photoModal').modal('show');
+            });
+        });
+    </script>
+{% endblock %}
+
+

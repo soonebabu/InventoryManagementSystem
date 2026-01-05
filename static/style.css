@@ -1,0 +1,342 @@
+/* styles.css */
+
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-fluid{
+  flex: 1;
+}
+
+.navbar {
+  background-color: #333;
+  padding: 10px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  text-decoration: none;
+  color: white;
+  font-size: 24px;
+}
+
+.navbar-nav {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  padding: 5px 15px;
+}
+.navbar-text {
+  font-size: 30px;
+  color: white;
+  text-decoration: none;
+}
+
+.navbar-nav .nav-item a {
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  padding: 5px 15px;
+}
+
+.navbar-nav .nav-item a:hover {
+  background-color: #800080;
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+  border-radius : 10px;
+}
+
+.no-underline {
+  text-decoration: none;
+}
+
+/* display.css **START Custom CSS for table row and column styling */
+.table tbody tr:hover {
+  background-color: #c0c0c0; /* Row color on hover */
+}
+.table tbody td {
+  color: #333; /* Text color for table cells */
+}
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: auto;
+  min-width: 100%; /* Set a minimum width to prevent container collapse */
+}
+.table-container table {
+  width: 100%;  /* Use 100% width for the table to enable horizontal scrolling */
+}
+.name {
+  background-color: #ffcccc;
+}
+.province {
+  background-color: #c2f0c2;
+}
+.district {
+  background-color: #ffdb58;
+}
+.date {
+  background-color: #99ccff;
+}
+.id-number {
+  background-color: #ffaa80;
+}
+.purpose {
+  background-color: #e0e0e0;
+}
+.hidden {
+  display: none;
+}
+.vehicle-number {
+  background-color: #b5e7a0;
+}
+.status-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.status-button {
+  background-color: #3399ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px; /* Adjust padding as needed */
+}
+.status-exit {
+  background-color: #3399ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 20px; /* Adjust padding as needed */
+}
+.status-button.active {
+  background-color: #00ff00; /* Green color */
+}
+.bottom-navbar {
+  background-color: #343a40; /* Set the background color as needed */
+  padding: 10px; /* Add padding for better visibility */
+  display: flex;
+  justify-content: space-between; /* Align items to the start and end of the container */
+  align-items: center; /* Center items vertically */
+}
+.navbar-image,
+.navbar-gif {
+  max-height: 50px; /* Set the maximum height of your images */
+}
+
+.navbar-image {
+  margin-right: 400px; /* Add margin to the right of the left image */
+}
+
+.navbar-gif {
+  margin-left: 400px; /* Add margin to the left of the right image */
+}
+/* Add this to your CSS file */
+.footer {
+background-color: #343a40; /* Adjust the background color as needed */
+color: #ffffff; /* Adjust the text color as needed */
+padding: 20px;
+margin-top: 250px; /* Add margin to the top */
+bottom: 0;
+}
+
+.h5 {
+color: #ffffff; /* Adjust the heading color as needed */
+}
+
+.ul {
+list-style: none;
+padding: 0;
+}
+
+.ul li {
+margin-bottom: 10px;
+}
+
+.ul li a {
+color: #ffffff; /* Adjust the link color as needed */
+text-decoration: none;
+}
+
+.ul li a:hover {
+text-decoration: underline;
+}
+
+.float-end {
+float: right;
+margin-top: 10px; /* Adjust the margin as needed */
+}
+.apply-pass-container {
+  background-color: #f8f9fa; /* Set a background color */
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
+
+.section-heading {
+  color: #007bff; /* Set the heading color */
+}
+
+.section-description {
+  color: #6c757d; /* Set the description color */
+}
+
+.btn-primary {
+  background-color: #28a745; /* Set the button background color */
+  border-color: #28a745; /* Set the button border color */
+}
+
+.apply-now-image {
+  max-width: 100%; /* Ensure the image doesn't exceed its container */
+  height: auto; /* Maintain the aspect ratio */
+  border-radius: 5px; /* Add a slight border radius */
+}
+
+
+.form-control {
+  border-radius: 5px; /* Add a border radius to the input field */
+}
+
+.input-group-text {
+  background-color: #007bff; /* Set the search icon background color */
+  border-color: #007bff; /* Set the search icon border color */
+  color: #fff; /* Set the search icon color */
+  cursor: pointer; /* Add pointer cursor to indicate interactivity */
+}
+
+.input-group-text:hover {
+  background-color: #0056b3; /* Change background color on hover */
+}
+#export-button {
+  padding: 10px 15px; /* Adjust padding as needed */
+  background-color: #28a745; /* Set the button background color */
+  color: #fff; /* Set the button text color */
+  border: none; /* Remove button border */
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  cursor: pointer; /* Add pointer cursor to indicate interactivity */
+}
+
+.button-icon {
+  max-width: 20px; /* Set the maximum width of the image */
+  margin-right: 5px; /* Add margin to the right of the image for spacing */
+}
+/* Add these styles to your existing CSS or create a new CSS file */
+
+.search-input-group {
+  position: relative;
+}
+
+.search-input {
+  border-radius: 25px; /* Add border-radius for rounded corners */
+  padding-right: 40px; /* Adjust padding to make space for the search icon */
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px; /* Adjust the right distance as needed */
+  transform: translateY(-50%);
+  /* color: #0000; Set the color of the search icon */
+  cursor: pointer;
+}
+
+/* Styles for focus effect */
+.search-input:focus {
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a box shadow on focus */
+}
+
+.search-icon:hover {
+  color: #000000; /* Change color on hover */
+}
+.custom-radio {
+  display: inline-block;
+  margin-right: 20px; /* Adjust as needed */
+}
+
+.custom-radio input[type="radio"] {
+  display: none;
+}
+
+.custom-radio label {
+  cursor: pointer;
+  position: relative;
+  padding-left: 30px; /* Adjust as needed */
+  line-height: 20px; /* Adjust as needed */
+}
+
+.custom-radio label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px; /* Adjust as needed */
+  height: 20px; /* Adjust as needed */
+  border: 2px solid #333; /* Border color */
+  border-radius: 50%; /* Make it a circle */
+  background-color: #fff; /* Background color */
+}
+
+.custom-radio input[type="radio"]:checked + label:before {
+  background-color: #007bff; /* Change to your desired fill color when selected */
+  border-color: #007bff; /* Change to your desired border color when selected */
+}
+.body.modal-open .modal {
+  display: flex !important;
+  align-items: center;
+}
+
+.modal-dialog {
+  margin: auto;
+}
+#notificationContainer {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+}
+
+.notification {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.success {
+  background-color: #28a745; /* Green */
+}
+
+.error {
+  background-color: #dc3545; /* Red */
+}
+.font-weight-bold {
+  font-weight: bold;
+}
+
+
+/* Add more styles for additional links or customize as per your design */
+
+
+
+
+
+/* display.css **END
+

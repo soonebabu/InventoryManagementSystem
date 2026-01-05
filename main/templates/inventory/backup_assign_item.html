@@ -1,0 +1,401 @@
+ <!-- Top Navigation Bar -->
+ <nav class="top-navbar">
+  <div class="container">
+      <marquee behavior="scroll" direction="left" scrollamount="8">
+          Nepal Government's official website
+      </marquee>
+  </div>
+</nav>
+
+<nav class="bottom-navbar navbar-expand-lg">
+  <div class="container">
+      <!-- Add your image and GIF here -->
+      <a href="{% url 'home' %}">
+          <img src="{% load static %}{% get_media_prefix %}app_logos/mod.png" alt="Your Image" class="navbar-image">
+      </a>
+          <img src="{% load static %}{% get_media_prefix %}app_logos/nepal_flag.gif" alt="Your GIF" class="navbar-gif">
+
+  </div>
+</nav>
+<nav class="bottom-navbar navbar-expand-lg">
+  <div class="container">
+
+      <!-- Navigation Links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto"> <!-- Use ml-auto to push the items to the right -->
+              {% if request.user.is_authenticated %}
+                  {% comment %} <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'home' %}">Home</a></li> {% endcomment %}
+
+                  {% with user_groups=request.user.groups.all %}
+                  
+                      {% comment %} {% if 'STORE' in user_groups.values_list|join:',' %}
+
+                          <li class="nav-item"><a class="nav-link" href="{% url 'add_item' %}">Add Item</a></li>
+                      {% else %}
+                          <!-- Display "Request Item" for other users -->
+                          <li class="nav-item"><a class="nav-link" href="{% url 'request_item' %}">Request Item</a></li>
+                      {% endif %} {% endcomment %}
+                  {% endwith %}
+
+                  {% comment %} <li class="nav-item"><a class="nav-link" aria-current="page" href="{% url 'item_list' %}">Item List</a></li> {% endcomment %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'view_notifications' %}" onclick="markNotificationsAsRead()">
+                          <i class="fas fa-bell"></i>
+                          {% if unread_notification_count > 0 %}
+                                  <span id="notificationCount" class="badge badge-pill badge-primary">{{ unread_notification_count }}</span>
+                              {% endif %}
+                              
+                      </a>
+                  </li>
+
+
+                  <div class="notification-icon ml-auto mr-3">
+
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">My Account</a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                          <li><a class="dropdown-item" href="{% url 'update_profile' %}" style="color:black">Profile</a></li>
+                          <li><a class="dropdown-item" href="{% url 'signup' %}" style="color:black">Create User</a></li>
+                          <li><a class="dropdown-item" href="{% url 'logout' %}" style="color:black">Logout</a></li>
+                      </ul>
+                  </li>
+              {% endif %}
+          </ul>
+      </div>
+  </div>
+</nav>
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container text-center mt-4">
+  <h2 class="mb-4">ITEM DETAILS</h2>
+  <div class="input-group mb-3 search-input-group">
+    <input type="text" id="searchInput" class="form-control search-input" placeholder="Type to Search">
+    <div class="input-group-append">
+      <span class="input-group-text search-icon">
+        <i class="fas fa-search"></i>
+      </span>
+    </div>
+  </div>
+
+  <div id="table-container" class="table-container">
+    <form method="post" action="" id="assignForm">
+      {% csrf_token %}
+      <table id="data-table" class="table table-striped table-bordered table-hover">
+        <!-- Table header -->
+        <thead class="thead-dark">
+          <tr>
+            <th>Select</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Consumable</th>
+            <th>Available Quantity</th>
+            <th>Selected Quantity</th>
+            <th>Condition</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            {% if item.assignedOffice|lower == 'store' and item.quantity > 0 %}
+              <!-- Table rows for items -->
+              <tr>
+                <td>
+                  <input type="checkbox" name="selected_items" value="{{ item.pk }}">
+                </td>
+                <td class="primary-key hidden" data-primary-key="{{ item.pk }}"></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.consumable }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                  <input type="number" name="selected_quantity_{{ item.pk }}" class="selected-quantity" min="0" max="{{ item.quantity }}">
+                </td>
+                <td>{{ item.get_condition_display }}</td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <!-- Display all available group names as buttons -->
+      <div class="available-groups">
+        {% for group in groups %}
+          <button type="submit" name="assigned_to" value="{{ group.name }}" class="group-button">{{ group.name }}</button>
+        {% endfor %}
+      </div>
+
+      <!-- Add JavaScript to handle the form submission -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const assignForm = document.getElementById('assignForm');
+          const groupButtons = document.querySelectorAll('.group-button');
+
+          groupButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+              console.log('Button Value:', button.value); // Add this line for debugging
+
+              const selectedItems = document.querySelectorAll('input[name="selected_items"]:checked');
+              if (selectedItems.length > 0) {
+                const confirmation = confirm(`Assign ${selectedItems.length} item(s) to ${button.value}?`);
+                if (confirmation) {
+                  assignForm.submit(); // Submit the form if OK is clicked
+                }
+              } else {
+                alert('Please select at least one item.');
+              }
+            });
+          });
+        });
+      </script>
+    </form>
+  </div>
+</div>
+{% endblock %} {% endcomment %}
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container text-center mt-4">
+  <h2 class="mb-4">ITEM DETAILS</h2>
+  <div class="input-group mb-3 search-input-group">
+    <input type="text" id="searchInput" class="form-control search-input" placeholder="Type to Search">
+    <div class="input-group-append">
+      <span class="input-group-text search-icon">
+        <i class="fas fa-search"></i>
+      </span>
+    </div>
+  </div>
+
+  <div id="table-container" class="table-container">
+    <form method="post" action="{% url 'assign_item' %}">
+      {% csrf_token %}
+      <table id="data-table" class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Select</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Consumable</th>
+            <th>Available Quantity</th>
+            <th>Selected Quantity</th> <!-- New column -->
+            <th>Condition</th>
+            <th>Assigned To</th>
+            <!-- Remove Edit column -->
+            <!-- Add more columns for other attributes as needed -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            {% if item.assignedOffice|lower == 'store' %}
+              <tr>
+                <td>
+                  <input type="checkbox" name="selected_items" value="{{ item.pk }}">
+                </td>
+                <td class="primary-key hidden" data-primary-key="{{ item.pk }}"></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.consumable }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>
+                  <input type="number" name="selected_quantity_{{ item.pk }}" class="selected-quantity" min="0" max="{{ item.quantity }}">
+                </td>
+                <td>{{ item.get_condition_display }}</td>
+                <td>
+                  <label for="assigned_to">Assigned To:</label>
+                  <select name="assigned_to" id="assigned_to_dropdown">
+                    {% for group in groups %}
+                      <option value="{{ group.name }}">{{ group.name }}</option>
+                    {% endfor %}
+                  </select>
+                  <!-- Add a hidden input field to store the selected value -->
+                  <input type="hidden" name="selected_assigned_to" id="selected_assigned_to" value="">
+                </td>
+                <!-- Remove Edit column -->
+                <!-- Add more columns for other attributes as needed -->
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <button type="submit">Verify Assign Item</button>
+    </form>
+  </div>
+</div>
+
+<!-- Script to update the hidden input with the selected value -->
+<!-- Script to update the hidden input with the selected value -->
+<script>
+  document.getElementById('assigned_to_dropdown').addEventListener('change', function() {
+    var selectedValue = this.value;
+    document.getElementById('selected_assigned_to').value = selectedValue;
+  });
+
+  // Ensure the hidden input is initialized with the default selected value
+  document.addEventListener('DOMContentLoaded', function() {
+    var defaultSelectedValue = document.getElementById('assigned_to_dropdown').value;
+    document.getElementById('selected_assigned_to').value = defaultSelectedValue;
+  });
+</script>
+
+
+{% endblock %} {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container text-center mt-4">
+  <h2 class="mb-4">ITEM DETAILS</h2>
+  <div class="input-group mb-3 search-input-group">
+    <input type="text" id="searchInput" class="form-control search-input" placeholder="Type to Search">
+    <div class="input-group-append">
+      <span class="input-group-text search-icon">
+        <i class="fas fa-search"></i>
+      </span>
+    </div>
+  </div>
+
+  <div id="table-container" class="table-container">
+    <form method="post" action="{% url 'assign_item' %}">
+      {% csrf_token %}
+      <table id="data-table" class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th>Select</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Consumable</th>
+            <th>Available Quantity</th>
+            <th>Selected Quantity</th> <!-- New column -->
+            <th>Condition</th>
+            <th>Assigned To</th>
+            <!-- Remove Edit column -->
+            <!-- Add more columns for other attributes as needed -->
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            {% if item.assignedOffice|lower == 'store' %}
+              <tr>
+                <td>
+                  <input type="checkbox" name="selected_items" value="{{ item.pk }}">
+                </td>
+                <td class="primary-key hidden" data-primary-key="{{ item.pk }}"></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.consumable }}</td>
+                <td>{{ item.quantity }}</td>
+
+                <td>
+                  <input type="number" name="selected_quantity_{{ item.pk }}" class="selected-quantity" min="0" max="{{ item.quantity }}">
+                </td>
+                <td>{{ item.get_condition_display }}</td>
+                <td>
+                  <label for="assigned_to">Assigned To:</label>
+                  <select name="assigned_to" id="assigned_to">
+                    {% for group in groups %}
+                      <option value="{{ group.name }}">{{ group.name }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <!-- Remove Edit column -->
+                <!-- Add more columns for other attributes as needed -->
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <button type="submit">Verify Assign Item</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+
+{% block content %}
+  <div class="container text-center mt-4">
+    <h2 class="mb-4">ITEM DETAILS</h2>
+    <div class="input-group mb-3 search-input-group">
+      <input type="text" id="searchInput" class="form-control search-input" placeholder="Type to Search">
+      <div class="input-group-append">
+        <span class="input-group-text search-icon">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </div>
+
+    <div id="table-container" class="table-container">
+      <form method="post" action="{% url 'assign_item' %}">
+        {% csrf_token %}
+        <table id="data-table" class="table table-striped table-bordered table-hover">
+          <thead class="thead-dark">
+            <tr>
+              <th>Select</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Consumable</th>
+              <th>Available Quantity</th>
+              <th>Condition</th>
+              <th>Assigned To</th>
+              <th>Selected Quantity</th>
+              <!-- Remove Edit column -->
+              <!-- Add more columns for other attributes as needed -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              <tr>
+                <td>
+                  <input type="checkbox" name="selected_items" value="{{ item.pk }}">
+                </td>
+                <td class="primary-key hidden" data-primary-key="{{ item.pk }}"></td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.consumable }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.get_condition_display }}</td>
+                <!-- Remove Edit column -->
+                <td>
+                  <label for="assigned_to">Assigned To:</label>
+                  <select name="assigned_to" id="assigned_to">
+                    {% for group in groups %}
+                      <option value="{{ group.name }}">{{ group.name }}</option>
+                    {% endfor %}
+                  </select>
+                </td>
+                <!-- Add more columns for other attributes as needed -->
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <button type="submit">Finalize</button>
+      </form>
+    </div>
+  </div>
+{% endblock %} {% endcomment %} 

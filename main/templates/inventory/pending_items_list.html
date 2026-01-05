@@ -1,0 +1,14 @@
+<!-- pending_items_list.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Pending Items</h2>
+  <ul>
+    {% for pending_item in pending_items %}
+      <li>
+        {{ pending_item.item.name }} (Quantity: {{ pending_item.quantity }}) - {{ pending_item.assigned_office }}
+        <a href="{% url 'confirm_item' pending_item.id %}">Confirm</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

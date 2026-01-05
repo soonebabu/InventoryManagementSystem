@@ -1,0 +1,531 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="{% static 'bootstrap-icons/font/bootstrap-icons.css' %}" rel="stylesheet" />
+    <!-- Include jquery -->
+    <script type="text/javascript" src="{% static 'jquery-3.6.0.min.js' %}"></script>
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  
+	<!-- Include Bootstrap Datepicker CSS and JavaScript -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
+<!-- Add this in the head section of your base.html or template file -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+
+<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+
+<script src="http://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/js/nepali.datepicker.v4.0.1.min.js" type="text/javascript"></script>
+<link href="http://nepalidatepicker.sajanmaharjan.com.np/nepali.datepicker/css/nepali.datepicker.v4.0.1.min.css" rel="stylesheet" type="text/css"/>
+
+<!-- Link to External CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+
+<!-- Link to External JS -->
+<script type="text/javascript" src="{% static 'script.js' %}"></script>
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-HW2T1PzvkjSmV+t9o0VFkeGn5ewC1CXA8FHHbZkgoqb9g/Z2e3S/47vuAYftFjuk" crossorigin="anonymous">
+<link rel="icon" href="{% load static %}{% get_media_prefix %}app_logos/favicon.ico" type="image/x-icon">
+
+
+	<!-- endedcode -->
+	{{ form.media }}
+	
+
+
+
+    <title>Inventory Management System</title>
+  </head>
+ 
+  <body > 
+
+	
+
+
+<!-- Top Navigation Bar -->
+{% comment %} <nav class="top-navbar" style="background-color: #34495e; color: #fff; padding: 10px 0; width: 100%; text-align: center;">
+    <div class="container">
+        <span style="font-size: 24px; font-weight: bold;">Federal Secretariat Construction and Management Office</span>
+        <span style="font-size:24px;font-weight: bold;">Inventory Management System</span>
+    </div>
+</nav> {% endcomment %}
+
+<nav class="top-navbar navbar navbar-expand-lg navbar-light" style="background-color: white; padding-left: 20px; padding-right:20px; padding:0px">
+    <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% load static %}{% get_media_prefix %}app_logos/logo.png" alt="Your Image" style="max-height: 70px; width: auto; margin-left: 70px;">
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <span class="navbar-text" style="font-size: 18px; font-weight: bold; color: red;">
+                    <span style="display: block;">Government of Nepal</span>
+                    <span style="display: block; font-size: 22px;">Ministry of Urban Development</span>
+                    <span style="display: block;">Federal Secretariat Construction and Management Office</span>
+                </span>
+            </li>
+        </ul>
+
+        <span class="navbar-text" style="font-size: 24px; margin-left: 300px;color:black; font-weight:bold;">
+            INVENTORY MANAGEMENT SYSTEM
+        </span>
+
+    </div>
+    <img src="{% load static %}{% get_media_prefix %}app_logos/nepal_flag.gif" alt="Your GIF" style="max-height: 50px; margin-right:70px"> 
+
+</nav>
+
+
+
+<!-- Bottom Navigation Bar for Notification and My Account -->
+<style>
+    .bottom-navbar {
+        background-color: #093d63;
+        padding: 0px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height : 60px
+    }
+
+    .nav-links-left {
+        display: flex;
+        align-items: center;  
+    }
+
+    .nav-item {
+        margin-right: 15px;
+    }
+
+    .nav-link,
+    .nav-link:hover,
+    .nav-link:focus,
+    .nav-link:active {
+        color: white;
+        text-decoration: none;
+        font-size: 16px; /* Set the desired font size */
+        transition: color 0.3s; /* Add transition for smooth color change */
+    }
+
+    .nav-item a.active {
+        color: #007bff; /* Change to the desired color for the active link */
+    }
+
+    .user-groups {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+        color: white;
+    }
+
+    .user-groups .badge {
+        margin-right: 5px;
+    }
+
+    .my-account-dropdown {
+        display: flex;  
+        align-items: center;
+    }
+
+    .my-account-dropdown .dropdown-toggle,
+    .dropdown-menu a {
+        color: white;
+        text-decoration: none;
+        font-size: 16px; /* Set the desired font size */
+        transition: color 0.3s; /* Add transition for smooth color change */
+    }
+
+    .my-account-dropdown .dropdown-toggle:hover,
+    .my-account-dropdown .dropdown-toggle:focus,
+    .dropdown-menu a:hover,
+    .dropdown-menu a:focus {
+        color: orange; /* Change to the desired color on hover or click */
+    }
+
+    .fas.fa-bell {
+        color: white;
+        font-size: 20px; /* Set the desired font size */
+        transition: color 0.3s; /* Add transition for smooth color change */
+    }
+
+    .badge.badge-pill.badge-primary {
+        font-size: 14px; /* Set the desired font size */
+        background-color: #007bff; /* Change to the desired color */
+    }
+    
+</style>
+
+
+<nav class="bottom-navbar navbar-expand-lg" style="background-color: #093d63; ">
+    {% comment %} <a href="{% url 'home' %}">
+        <img src="{% load static %}{% get_media_prefix %}app_logos/mod.png" alt="Your Image" style="max-height: 50px; margin-right: 10px;">
+    </a> {% endcomment %}
+    <div class="container">
+        <div class="bottom-navbar">
+            <!-- Items aligned to the left -->
+            <div class="nav-links-left">
+                {% if request.user.is_authenticated %}
+                <div class="nav-item" data-toggle="tooltip" data-placement="bottom">
+                    <a class="nav-link home-link" aria-current="page" href="{% url 'home' %}" style="font-size: 20px;  font-weight: bold;">
+                        Home
+                    </a>
+                </div>
+
+                <div class="nav-item" data-toggle="tooltip" data-placement="bottom">
+                    <a class="nav-link home-link" aria-current="page" href="{% url 'item_request_list_sent' %}" style="font-size: 20px;  font-weight: bold;">
+                        Item Requests Sent
+                    </a>
+                </div>
+
+                {% if user_group_name == 'OFFICER' or user_group_name == 'UNDERSECRETARY' or user_group_name == 'JOINTSECRETARY' %}
+                <div class="nav-item" data-toggle="tooltip" data-placement="bottom">
+                    <a class="nav-link home-link" aria-current="page" href="{% url 'item_request_list' %}" style="font-size: 20px;  font-weight: bold;">
+                    Item Requests Received
+                    </a>
+                </div>
+
+                <div class="nav-item" data-toggle="tooltip" data-placement="bottom">
+                    <a class="nav-link home-link" aria-current="page" href="{% url 'item_list' %}" style="font-size: 20px;  font-weight: bold;">
+                    Item List
+                    </a>
+                </div>
+                {% endif %}
+                
+                
+                    
+                    
+                
+                
+                
+                <style>
+                    .icon-text {
+                        display: none; /* Hide the text by default */
+                    }
+                
+                    .nav-link:hover .icon-text {
+                        display: inline; /* Display the text on hover */
+                    }
+                    
+                </style>
+                
+                     {% if user_group_name != 'SUPERADMIN' and user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY'%}               
+                    {% comment %} {% if not user_subgroup_name %} {% endcomment %}
+                    {% if user_group_name == 'FSCMO' %} 
+                    <div class="nav-item" data-toggle="tooltip" data-placement="bottom" >
+                        <a class="nav-link home-link" aria-current="page" href="{% url 'add_item' %}" style="font-size: 20px; font-weight: bold;">
+                        Add Item
+                        </a>
+                    </div>
+
+                    <div class="nav-item" data-toggle="tooltip" data-placement="bottom">
+                        <a class="nav-link home-link" aria-current="page" href="{% url 'assign_item_by_store' %}" style="font-size: 20px;  font-weight: bold;">
+                            Assign Item
+                        </a>
+                    </div>
+                    
+                    {% endif %}
+                        {% if user_group_name != 'FSCMO' %}
+                            <div class="nav-item" data-toggle="tooltip" data-placement="bottom" >
+                                <a class="nav-link home-link" aria-current="page" href="{% url 'request_item' %}" style="font-size: 20px;  font-weight: bold;">
+                                    Request New Item
+                                </a>
+                            </div>
+                        {% endif %}
+                    
+                    <style>
+                        .icon-text {
+                            display: none; /* Hide the text by default */
+                        }
+                    
+                        .nav-link:hover .icon-text {
+                            display: inline; /* Display the text on hover */
+                        }
+                    </style>
+                    
+                    <div class="nav-item" data-toggle="tooltip" data-placement="bottom">
+                        <a class="nav-link home-link" aria-current="page" href="{% url 'item_list' %}" style="font-size: 20px;  font-weight: bold;">
+                        Item List
+                        </a>
+                    </div>
+                    {% endif %}
+
+                    
+                    
+                    <style>
+                        .icon-text {
+                            display: none; /* Hide the text by default */
+                        }
+                    
+                        .nav-link:hover .icon-text {
+                            display: inline; /* Display the text on hover */
+                        }
+                       
+
+                        /* Define the hover effect for the home link */
+                        .home-link:hover {
+                            color: orange; /* Change color to orange on hover */
+                        }
+
+                    </style>
+                                                            
+                    {% comment %} <div class="nav-item" data-toggle="tooltip" data-placement="bottom" title="Notifications">
+                        <a id="bell-link-base" href="{% url 'view_notifications' %}" onclick="markNotificationsAsRead()" class="text-dark">
+                            <i class="fas fa-bell fa-2x" style="color: white;"></i>
+                                {% if unread_notification_count > 0 %}
+                                <span style="color: white;">{{ unread_notification_count }}</span>
+                                {% endif %}
+                            </span>
+                        </a>
+                    </div> {% endcomment %}
+                    
+                    <script>
+                        $(document).ready(function(){
+                            $('[data-toggle="tooltip"]').tooltip();   
+                        });
+                    </script>
+                    
+                    <style>
+                        .notification-count {
+                            display: none; /* Hide the notification count by default */
+                            margin-left: 5px; /* Add margin for spacing */
+                        }
+                    
+                        .nav-item:hover .notification-count {
+                            display: inline; /* Display the notification count on hover */
+                        }
+                    </style>
+                    
+                {% endif %}
+
+               
+                
+                {% if user.is_authenticated %}
+                    {% if user_subgroup_name %}
+                        <div class="user-groups">
+                            <span class="user-group-label"></span>
+                            <span class="badge badge-info" style="font-size: 20px;">{{ user_group_full_name }}</span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- My Account aligned to the right -->
+            <div class="nav-item my-account-dropdown dropdown">
+                {% if user.is_authenticated %}
+                {% if user_group_name != 'SUPERADMIN' and user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY' and user_group_name != 'FSCMO'%}               
+
+                <div class="nav-item home-link" data-toggle="tooltip" data-placement="bottom" title="Notifications">
+                    <a id="bell-link-base" href="{% url 'view_notifications' %}" onclick="markNotificationsAsRead()" class="bell-link home-link">
+                        <i class="fas fa-bell fa-2x"></i>
+                        {% if unread_notification_count > 0 %}
+                        <span >{{ unread_notification_count }}</span>
+                        {% endif %}
+                    </a>
+                </div>
+                {% endif %}
+                
+                    {% if user_group_name == 'SUPERADMIN' %}
+                    <div class="nav-item home-link" data-toggle="tooltip" data-placement="bottom" title="View Users">
+                        <a class="nav-link home-link" href="{% url 'user_list' %}" style="font-size: 20px;">
+                            <i class="fas fa-users" style="margin-right: 5px;"></i> <!-- Font Awesome users icon -->
+                        </a>
+                    </div>
+                    
+                    <style>
+                        .icon-text {
+                            display: none; /* Hide the text by default */
+                        }
+                    
+                        .nav-link:hover .icon-text {
+                            display: inline; /* Display the text on hover */
+                        }
+                        /* Define the color for the bell icon */
+                        
+
+                        /* Define the color for the bell icon */
+                        
+                        /* Define the hover effect for the bell icon */
+                        #bell-link-base:hover i {
+                            color: orange; /* Change color to orange on hover */
+                        }
+                        /* Define the color for the home link */
+                       
+
+
+                    </style>
+                    {% endif %}
+                    <a class="nav-link dropdown-toggle home-link" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 20px; ">
+                        {% if user_subgroup_name %}
+                            {{ user_subgroup_name }}
+                        {% else %}
+                            {{ user_group_name }}
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarScrollingDropdown">
+                        {% if user_group_name == 'SUPERADMIN' %}
+                            <li><a class="dropdown-item  home-link" href="{% url 'update_profile' %}" style="color:black; font-weight:bold">User Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'add_group' %}" style="color:black; font-weight:bold">Add Group</a></li>
+                            <li><a class="dropdown-item" href="{% url 'add_subgroup' %}" style="color:black; font-weight:bold">Add Sub Group</a></li>
+                            <li><a class="dropdown-item" href="{% url 'signup' %}" style="color:black; font-weight:bold">Create User</a></li>
+                            <li><a class="dropdown-item" href="{% url 'update_user_profile' %}" style="color:black; font-weight:bold">Update User</a></li>
+                        {% endif %}
+
+                        {% comment %} {% if user_group_name != 'SUPERADMIN' and user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY' and user_group_name != 'FSCMO'%}               
+                        <li class="dropdown-item home-link" data-toggle="tooltip" data-placement="bottom">
+                                <a href="{% url 'view_notifications' notification_type='request_item' %}" class="btn btn-light btn-block mb-2" onclick="markNotificationsAsRead()" style="color:black; font-weight:bold">
+                                    <i class="fas fa-cart-plus" style="color: green;"></i> Request Message
+                                </a>
+                            </li>
+                        {% endif %} {% endcomment %}
+
+                        <li><a class="dropdown-item" href="{% url 'logout' %}" style="color: black; font-weight:bold">
+                            <i class="fas fa-sign-out-alt" style="color: red;"></i> Logout
+                        </a></li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% comment %} <img src="{% load static %}{% get_media_prefix %}app_logos/nepal_flag.gif" alt="Your GIF" style="max-height: 50px;"> {% endcomment %}
+
+</nav>
+
+
+<script>
+function updateNotificationCount() {
+    fetch('/get_unread_notification_count/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const notificationCountElement = document.getElementById('notificationCount');
+            if (data.unread_notification_count > 0) {
+                notificationCountElement.innerText = data.unread_notification_count;
+                notificationCountElement.style.display = 'inline';
+            } else {
+                notificationCountElement.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error fetching notification count:', error));
+}
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', updateNotificationCount);
+
+</script>	
+
+    {% block content %}
+
+    {% endblock %}
+
+   <!-- Footer Start -->
+
+   <footer class="footerJS" id="footer" style="background-color: #093d63; color: #fff;">
+    <div class="container">
+        <div class="row">
+            <!-- Left section -->
+            <div class="col-md-6">
+                <h4><strong>Useful Links</strong></h4>
+                <ul class="list-unstyled ul">
+                    <li><a href="https://www.opmcm.gov.np/" target="_blank">Office of the Prime Minister and Council of Ministers</a></li>
+                    <li><a href="https://moud.gov.np/" target="_blank">Ministry of Urban Development</a></li>
+                    <li><a href="https://fscmo.moud.gov.np/" target="_blank">Federal Secretarial Construction and Management Office</a></li>                        <!-- Add more links as needed -->
+                </ul>
+            </div>
+            <!-- Right section -->
+            <div class="col-md-6 text-md-end">
+                <h4><strong><a href="{% url 'contact_page' %}" style="color: #fff; text-decoration: none;">Contact Us</a></strong></h4>
+                <ul class="list-unstyled ul">
+                    <li><a href="https://www.facebook.com/" target="_blank"><i class="fas fa-map-marker-alt"></i> Singha Durbar</a></li>
+                    <li><a href="tel:977-1-4211673"><i class="fas fa-phone"></i> Phone - 977-1-4211673</a></li>
+                    <li><a href="mailto:urban@gov.np"><i class="fas fa-envelope"></i> Email urban@gov.np</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+<style>
+    .footerJS {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: navy;
+        color: yellow;
+        padding: 10px;
+        border-top: 1px solid #dee2e6;
+        margin-top: 20px; /* Added margin to create space between container and footer */
+        display: flex;
+        justify-content: space-between; /* Align children elements to the left and right */
+        align-items: left; /* Vertically center children elements */
+    }
+    /* Hide footer by default */
+    .footerJS.hidden {
+        display: none;
+    }
+    
+    /* Adjust the style for links within the footer */
+    .footerJS a {
+        color: white;
+        text-decoration: none;
+    }
+    
+    .footerJS a:hover {
+        color: orange;
+    }
+    
+</style>
+
+<script>
+    function adjustFooterVisibility() {
+        var footer = document.getElementById('footer');
+        var windowHeight = window.innerHeight;
+        var documentHeight = document.body.offsetHeight;
+
+        if (windowHeight >= documentHeight) {
+            footer.classList.remove('hidden');
+        } else {
+            footer.classList.add('hidden');
+        }
+    }
+
+    window.addEventListener('scroll', function() {
+        var footer = document.getElementById('footer');
+        var windowHeight = window.innerHeight;
+        var documentHeight = document.body.offsetHeight;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (windowHeight + scrollTop >= documentHeight) {
+            footer.classList.remove('hidden');
+        } else {
+            footer.classList.add('hidden');
+        }
+    });
+
+    window.addEventListener('resize', adjustFooterVisibility);
+    window.addEventListener('load', adjustFooterVisibility);
+</script>
+   
+
+
+<!-- Bootstrap Bundle -->
+<script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'popper.min.js' %}"></script>
+</body>
+</html>
+

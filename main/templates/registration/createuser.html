@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+        <!-- Main Start -->
+        <main>
+            <!-- Services -->
+            <section class="container my-4" style="margin-bottom:200px;">
+                    <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+                        <div class="card-body text-center">
+                          <h2 class="card-title" style = "color:white;">REGISTER</h2>
+                        </div>
+                      </div>
+                      <div style="margin-bottom: 20px;"></div>
+                <div class="row">
+                    <div class="col-md-6 offset-3">
+                        {% if msg %}
+                        <p class="text-success">{{msg}}</p>
+                        {% endif %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <table class="table table-bordered">
+                                {{form.first_name.errors}}
+                                <tr>
+                                    <th><label for="{{ form.first_name.id_for_label }}">First Name:</label></th>
+                                    <td>{{ form.first_name }}</td>
+                                </tr>
+                                {{form.last_name.errors}}
+                                <tr>
+                                    <th><label for="{{ form.last_name.id_for_label }}">Last Name:</label></th>
+                                    <td>{{ form.last_name }}</td>
+                                </tr>
+                                {{form.email.errors}}
+                                <tr>
+                                    <th><label for="{{ form.email.id_for_label }}">Email:</label></th>
+                                    <td>{{ form.email }}</td>
+                                </tr>
+                                {{form.username.errors}}
+                                <tr>
+                                    <th><label for="{{ form.username.id_for_label }}">Username:</label></th>
+                                    <td>{{ form.username }}</td>
+                                </tr>
+                                {{form.password1.errors}}
+                                <tr>
+                                    <th><label for="{{ form.password1.id_for_label }}">Password:</label></th>
+                                    <td>{{ form.password1 }}</td>
+                                </tr>
+                             
+                                {{form.password2.errors}}
+                                <tr>
+                                    <th><label for="{{ form.password2.id_for_label }}">Confirm Password:</label></th>
+                                    <td>{{ form.password2 }}</td>
+                                </tr>
+                                <tr>
+									<th><label for="{{ form.group.id_for_label }}">User Group:</label></th>
+									<td>    {{ form.group.label_tag }} {{ form.group }} {# Render the group field #}
+									</td>
+								</tr>
+								
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="submit" class="btn btn-primary" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- End -->
+        </main>
+        <!-- End -->
+    {% else %}
+        <p>Not Authorised</p>
+    {% endif %}
+{% endblock %}

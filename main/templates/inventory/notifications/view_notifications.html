@@ -1,0 +1,280 @@
+<!-- notifications/view_notifications.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .unread .card-title,
+    .unread .card-text {
+        font-weight: bold;
+    }
+
+    .notification-container {
+        max-width: 800px;
+        margin: auto;
+    }
+
+    .notification-card {
+        background-color: #fff; /* Set background color */
+        border: 1px solid #ddd; /* Set border color */
+        border-radius: 10px; /* Add border radius for rounded corners */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add subtle box shadow */
+        margin-bottom: 15px;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .notification-card:hover {
+        transform: scale(1.03);
+    }
+
+    .notification-card .card-body {
+        padding: 1.25rem;
+    }
+
+    .notification-card a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .filter-buttons .col-3 {
+        flex: 1; /* Ensure each button takes up equal space */
+    }
+
+    .filter-buttons .btn {
+        width: 100%;
+    }
+</style>
+
+<div class="container mt-4" style="margin-bottom:200px;">
+    <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+      <div class="card-body text-center">
+        <h2 class="card-title">NOTIFICATION</h2>
+      </div>
+    </div>
+    <div style="margin-bottom: 20px;"></div>
+
+    <div class="row justify-content-center mb-4 filter-buttons">
+        <div class="col-3">
+            <a href="{% url 'view_notifications' %}" class="btn btn-outline-secondary btn-light btn-block mb-2">All</a>
+        </div>
+        <div class="col-3">
+            <a href="{% url 'view_notifications' notification_type='add_item' %}" class="btn btn-outline-secondary btn-light btn-block mb-2">Add Item</a>
+        </div>
+        <div class="col-3">
+            
+            <a href="{% url 'view_notifications' notification_type='assign_item,assign_item_store' %}" class="btn btn-outline-secondary btn-light btn-block mb-2">Assign Item</a>
+        </div>
+        {% comment %} <div class="col-3">
+            <a href="{% url 'view_notifications' notification_type='request_item' %}" class="btn btn-outline-secondary btn-light btn-block mb-2">Request Item</a>
+        </div> {% endcomment %}
+        <div class="col-3">
+            <a href="{% url 'view_notifications' notification_type='return_item' %}" class="btn btn-outline-secondary btn-light btn-block mb-2">Return Item</a>
+        </div>
+        
+        
+        <div class="col-3">
+            <a href="{% url 'view_notifications' notification_type='change_status' %}" class="btn btn-outline-secondary btn-light btn-block">Change Status</a>
+        </div>
+
+        {% comment %} <div class="col-3">
+            <a href="{% url 'view_notifications' notification_type='request_item' %}" class="btn btn-outline-secondary btn-light btn-block mb-2">Request Item</a>
+        </div> {% endcomment %}
+    </div>
+
+    {% comment %} <div class="mb-3">
+        <a id="bell-link-view" href="{% url 'view_notifications' %}" onclick="markNotificationsAsRead()" class="text-dark">
+            {% if unread_notification_count > 0 %}
+                <span id="notificationCount-view" class="badge badge-pill badge-primary">{{ unread_notification_count }}</span>
+            {% endif %}
+        </a>
+    </div> {% endcomment %}
+
+    <div class="notification-container">
+        {% for notification in notifications %}
+            <a href="{% url 'notification_detail' notification.id %}" onclick="handleNotificationClick('{{ notification.id }}', this)" class="notification-card {% if notification.is_read %}read{% else %}unread{% endif %}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title {% if not notification.is_read %}font-weight-bold{% endif %} text-primary">{{ notification.title }}</h5>
+                        <p class="card-text {% if not notification.is_read %}font-weight-bold{% endif %} text-dark">{{ notification.message }}</p>
+                        <small class="text-muted">{{ notification.timestamp | date:"F d, Y h:i A" }}</small>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+    <script>
+        function markNotificationsAsRead() {
+            const markAsReadUrl = '/mark_notifications_as_read/';
+
+            fetch(markAsReadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('notificationCount').innerText = '0';
+                    document.getElementById('notificationCount').style.display = 'none';
+                    document.querySelectorAll('.card.unread').forEach(card => {
+                        card.classList.remove('unread');
+                        card.querySelector('.card-text').classList.remove('font-weight-bold');
+                    });
+                } else {
+                    console.error('Failed to mark notifications as read.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        // Inside handleNotificationClick function
+        function handleNotificationClick(notificationId, card) {
+            const markAsReadUrl = `/mark_notifications_as_read/${notificationId}/`;
+
+            fetch(markAsReadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    card.classList.remove('unread');
+                    card.querySelector('.card-text').classList.remove('font-weight-bold');
+                    
+                    // Redirect to the notification detail page
+                    window.location.href = `/notification_detail/${notificationId}/`;
+                } else {
+                    console.error('Failed to mark notification as read.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationContainer = document.querySelector('.notification-container');
+            if (notificationContainer) {
+                notificationContainer.classList.add('rounded', 'shadow', 'p-3', 'bg-light');
+            }
+        });
+    </script>
+{% endblock %}
+
+
+
+
+{% comment %} <!-- notifications/view_notifications.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Notifications</h2>
+        
+        <!-- Display the notification count in the bell icon -->
+        <a id="bell-link" href="{% url 'view_notifications' %}" onclick="markNotificationsAsRead()">
+            <i class="fas fa-bell"></i>
+            <span id="notificationCount" class="badge badge-pill badge-danger">{{ unread_notification_count }}</span>
+        </a>
+        
+        <div class="notification-container">
+            {% for notification in notifications %}
+                <div class="card mb-3 {% if notification.is_read %}read{% else %}unread{% endif %}" onclick="handleNotificationClick('{{ notification.id }}', this)">
+                    <div class="card-body">
+                        <p class="card-text {% if not notification.is_read %}font-weight-bold{% endif %}">{{ notification.message }}</p>
+                        <small class="text-muted">{{ notification.timestamp }}</small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Your existing JavaScript code for marking notifications as read -->
+    <script>
+        function markNotificationsAsRead() {
+            const markAsReadUrl = '/mark_notifications_as_read/';
+
+            fetch(markAsReadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('notificationCount').innerText = '0';
+                    document.querySelectorAll('.card.unread').forEach(card => {
+                        card.classList.remove('unread');
+                    });
+                } else {
+                    console.error('Failed to mark notifications as read.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function handleNotificationClick(notificationId, card) {
+            const markAsReadUrl = `/mark_notification_as_read/${notificationId}/`;
+
+            fetch(markAsReadUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    card.classList.remove('unread');
+                    card.querySelector('.card-text').classList.remove('font-weight-bold');
+                } else {
+                    console.error('Failed to mark notification as read.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationContainer = document.querySelector('.notification-container');
+            if (notificationContainer) {
+                notificationContainer.classList.add('rounded', 'shadow', 'p-3', 'bg-light');
+            }
+        });
+    </script>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- Main Start -->
+    <main class="container mt-4" style="margin-bottom:200px;">
+      <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+        <div class="card-body text-center">
+          <h2 class="card-title" style = "color:white;">UPDATE USER'S PROFILE</h2>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;"></div>
+
+        <div class="row">
+            <div class="col-md-3">
+                {% include 'user/left-sidebar.html' %}
+            </div>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
+                        {% if msg %}
+                            <p class="text-success">{{ msg }}</p>
+                        {% endif %}
+                        <form method="post" id="updateUserForm">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                              <label for="id_user_to_update" style="font-weight: bold;">Select User to Update:</label>
+                              {{ form.user_to_update }}
+                                <div class="mt-3"></div>
+
+                                <div class="text-center">
+                                  <button type="button" class="btn btn-primary" onclick="searchUser()">Search</button>
+                              </div>
+                                                          </div>
+
+                            <div id="userData" style="display: none;">
+                                <h3>User Data</h3>
+                                <div class="row" style="font-weight:bold;">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_first_name">First Name:</label>
+                                            <input type="text" class="form-control" id="id_first_name" name="first_name" value="{{ form.instance.first_name }}" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="id_last_name">Last Name:</label>
+                                            <input type="text" class="form-control" id="id_last_name" name="last_name" value="{{ form.instance.last_name }}" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="font-weight:bold;">
+                                    <label for="id_email">Email:</label>
+                                    <input type="email" class="form-control" id="id_email" name="email" value="{{ form.instance.email }}" required>
+                                </div>
+
+                                <div class="form-group" style="font-weight:bold;">
+                                    <label for="id_username">Username:</label>
+                                    <input type="text" class="form-control" id="id_username" name="username" value="{{ form.instance.username }}" readonly >
+                                </div>
+
+                                <div class="mt-3"></div>
+
+                                <button type="submit" class="btn btn-success d-block mx-auto">UPDATE PROFILE</button>
+                                {% comment %} <a href="javascript:void(0);" class="btn btn-secondary">Cancel</a> {% endcomment %}
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- End -->
+
+    <script>
+        function searchUser() {
+            var selectedUser = document.getElementById("id_user_to_update").value;
+
+            // Implement logic to fetch user data based on selectedUser using AJAX
+            // For simplicity, I'm assuming you have a URL endpoint to fetch user data
+            var url = "/get_user_data/" + selectedUser + "/";
+
+            // Use AJAX to fetch user data
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Update the form fields with fetched data
+                    document.getElementById("id_first_name").value = data.first_name;
+                    document.getElementById("id_last_name").value = data.last_name;
+                    document.getElementById("id_email").value = data.email;
+                    document.getElementById("id_username").value = data.username;
+
+
+                    
+
+                    // Display the user data section
+                    document.getElementById("userData").style.display = "block";
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+    </script>
+{% endblock %}
+
+
+
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+<div class="col-3">
+  {% include 'user/left-sidebar.html' %}
+</div>
+
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h2 class="card-title">Update User Profile</h2>
+
+      <form method="post" id="updateUserForm">
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="id_user_to_update">Select User to Update:</label>
+          {{ form.user_to_update }}
+          <div class="mt-3"></div>
+
+          <button type="button" class="btn btn-primary" onclick="searchUser()">Search</button>
+        </div>
+
+        <div id="userData" style="display: none;">
+          <h3>User Data</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="id_first_name">First Name:</label>
+                <input type="text" class="form-control" id="id_first_name" name="first_name" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="id_last_name">Last Name:</label>
+                <input type="text" class="form-control" id="id_last_name" name="last_name" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="id_email">Email:</label>
+            <input type="email" class="form-control" id="id_email" name="email" required>
+          </div>
+
+          <div class="form-group">
+            <label for="id_username">Username:</label>
+            <input type="text" class="form-control" id="id_username" name="username" required>
+          </div>
+
+          <div class="mt-3"></div>
+
+          <button type="submit" class="btn btn-success">Update Profile</button>
+        </div>
+
+        {% if msg %}
+          <p class="mt-3 alert alert-info">{{ msg }}</p>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  function searchUser() {
+    var selectedUser = document.getElementById("id_user_to_update").value;
+
+    // Implement logic to fetch user data based on selectedUser using AJAX
+    // For simplicity, I'm assuming you have a URL endpoint to fetch user data
+    var url = "/get_user_data/" + selectedUser + "/";
+
+    // Use AJAX to fetch user data
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Update the form fields with fetched data
+        document.getElementById("id_first_name").value = data.first_name;
+        document.getElementById("id_last_name").value = data.last_name;
+        document.getElementById("id_email").value = data.email;
+
+        // Check if the 'username' field exists in the data object
+        if ('username' in data) {
+          document.getElementById("id_username").value = data.username;
+        } else {
+          console.error('Error: Username field not found in the server response.');
+        }
+
+        // Display the user data section
+        document.getElementById("userData").style.display = "block";
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
+</script>
+{% endblock %} {% endcomment %}
+
+
+
+
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+  <h2>Update User Profile</h2>
+  <form method="post" id="updateUserForm">
+    {% csrf_token %}
+    
+    <div class="form-group">
+      <label for="id_user_to_update">Select User to Update:</label>
+      {{ form.user_to_update }}
+      <button type="button" onclick="searchUser()">Search</button>
+    </div>
+    
+    <div id="userData" style="display: none;">
+      <h3>User Data</h3>
+      {% for field in form.visible_fields %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+        </div>
+      {% endfor %}
+      <button type="submit">Update Profile</button>
+    </div>
+
+    {% if msg %}
+      <p>{{ msg }}</p>
+    {% endif %}
+  </form>
+
+  <script>
+    function searchUser() {
+      var selectedUser = document.getElementById("id_user_to_update").value;
+      
+      // Implement logic to fetch user data based on selectedUser using AJAX
+      // For simplicity, I'm assuming you have a URL endpoint to fetch user data
+      var url = "/get_user_data/" + selectedUser + "/";
+      
+      // Use AJAX to fetch user data
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Update the form fields with fetched data
+          {% for field in form.visible_fields %}
+            document.getElementById("id_{{ field.name }}").value = data.{{ field.name }};
+          {% endfor %}
+          
+          // Display the user data section
+          document.getElementById("userData").style.display = "block";
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  </script>
+{% endblock %} {% endcomment %}

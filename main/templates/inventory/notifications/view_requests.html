@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Requests</title>
+</head>
+<body>
+    <h1>Requested Items</h1>
+    <ul>
+        {% for subgroup in subgroups %}
+            <h2>{{ subgroup.name }}</h2>
+            {% for item in subgroup.requested_items.all %}
+                <li>
+                    <strong>Name:</strong> {{ item.name }}<br>
+                    <strong>Quantity:</strong> {{ item.quantity }} {{ item.unit }}<br>
+                    <strong>Requested Date:</strong> {{ item.requestDate }}<br>
+                    {% if item.requestitem_photo %}
+                        <img src="{{ item.requestitem_photo.url }}" alt="{{ item.name }} Photo">
+                    {% endif %}
+                </li>
+            {% empty %}
+                <p>No requested items in this subgroup.</p>
+            {% endfor %}
+        {% empty %}
+            <p>No subgroups found.</p>
+        {% endfor %}
+    </ul>
+</body>
+</html>

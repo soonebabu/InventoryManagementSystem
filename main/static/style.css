@@ -1,0 +1,190 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #333;
+    padding: 10px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.navbar-brand {
+    text-decoration: none;
+    color: white;
+    font-size: 24px;
+}
+
+.navbar-nav {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+.navbar-text {
+    font-size: 30px;
+    color: black;
+    text-decoration: none;
+}
+
+.navbar-nav .nav-item a {
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    padding: 5px 15px;
+}
+
+.navbar-nav .nav-item a:hover {
+    background-color: #800080;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+    border-radius : 10px;
+}
+
+.no-underline {
+    text-decoration: none;
+}
+
+/* display.css **START Custom CSS for table row and column styling */
+.table tbody tr:hover {
+    background-color: #c0c0c0; /* Row color on hover */
+  }
+  .table tbody td {
+    color: #333; /* Text color for table cells */
+  }
+  .table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+    min-width: 100%; /* Set a minimum width to prevent container collapse */
+  }
+  .table-container table {
+    width: 100%;  /* Use 100% width for the table to enable horizontal scrolling */
+  }
+  .name {
+    background-color: #ffcccc;
+  }
+  .province {
+    background-color: #c2f0c2;
+  }
+  .district {
+    background-color: #ffdb58;
+  }
+  .date {
+    background-color: #99ccff;
+  }
+  .id-number {
+    background-color: #ffaa80;
+  }
+  .purpose {
+    background-color: #e0e0e0;
+  }
+  .hidden {
+    display: none;
+  }
+  .vehicle-number {
+    background-color: #b5e7a0;
+  }
+  .status-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .status-button {
+    background-color: #3399ff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 20px; /* Adjust padding as needed */
+  }
+  .status-exit {
+    background-color: #3399ff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 20px; /* Adjust padding as needed */
+  }
+  .status-button.active {
+    background-color: #00ff00; /* Green color */
+  }
+  .bottom-navbar {
+    background-color: #343a40; /* Set the background color as needed */
+    padding: 100px; /* Add padding for better visibility */
+    display: flex;
+    justify-content: flex-end; /* Align items to the start and end of the container */
+    align-items: center; /* Center items vertically */
+  }
+  .navbar-image,
+  .navbar-gif {
+    max-height: 50px; /* Set the maximum height of your images */
+  }
+
+  .navbar-image {
+    margin-right: 10px; /* Add margin to the right of the left image */
+  }
+
+  .navbar-gif {
+    margin-left: 10px; /* Add margin to the left of the right image */
+  }
+  /* Add this to your CSS file */
+  .footer {
+  background-color: #343a40; /* Adjust the background color as needed */
+  color: #ffffff; /* Adjust the text color as needed */
+  padding: 20px;
+  margin-top: 20px; /* Add margin to the top */
+  }
+
+  .h5 {
+  color: #ffffff; /* Adjust the heading color as needed */
+  }
+
+  .ul {
+  list-style: none;
+  padding: 0;
+  }
+
+  .ul li {
+  margin-bottom: 10px;
+  }
+
+  .ul li a {
+  color: #ffffff; /* Adjust the link color as needed */
+  text-decoration: none;
+  }
+
+  .ul li a:hover {
+  text-decoration: underline;
+  }
+
+  .float-end {
+  float: right;
+  margin-top: 10px; /* Adjust the margin as needed */
+  }
+  .font-weight-bold {
+    font-weight: bold;
+}
+/* Add this to your CSS styles */
+.unread {
+  background-color: #0d79ed; /* Set your desired background color for unread notifications */
+  border: 1px solid #5bc0de; /* Set your desired border color for unread notifications */
+}
+
+/* Add more styles for additional links or customize as per your design */
+
+
+
+  
+
+  /* display.css **END

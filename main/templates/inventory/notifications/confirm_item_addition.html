@@ -1,0 +1,24 @@
+<!-- confirm_item_addition.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+  <div class="card" style="max-width: 700px; margin: 0 auto;">
+      <div class="card-header" style="background-color: #5bc0de;">
+          <h2 class="text-white text-center mb-0">Confirm Assignment</h2>
+      </div>
+      <div class="card-body">
+        <p>Are you sure you want to confirm the item "{{ pending_item.item.name }}" for the office "{{ pending_item.assigned_office }}" with quantity {{ pending_item.quantity }}?</p>
+
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" name="confirm" class="btn btn-success">Confirm</button>
+    <button type="submit" name="reject" class="btn btn-danger">Reject</button>
+
+   
+  </form>
+</div>
+</div>
+</div>
+{% endblock %}

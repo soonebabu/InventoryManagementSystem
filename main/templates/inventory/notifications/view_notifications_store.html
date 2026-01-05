@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container mt-4" style="margin-bottom:200px;">
+        <h2 class="text-center mb-4">Store Notifications</h2>
+        {% if notifications %}
+            <ul class="list-group">
+                {% for notification in notifications %}
+                    <li class="list-group-item{% if not notification.is_read %} list-group-item-warning{% endif %}">
+                        <strong>{{ notification.message }}</strong>
+                        <p class="text-muted">{{ notification.timestamp }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No notifications available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Custom styles for item request notifications */
+</style>
+
+<div class="container mt-4" style="margin-bottom:200px;">
+    <!-- Header for the page -->
+    <div class="card text-white" style="background-color: #5bc0de;">
+        <div class="card-body text-center">
+            <h2 class="card-title">Item Request Notifications</h2>
+        </div>
+    </div>
+    <div style="margin-bottom: 20px;"></div>
+
+    <!-- Button for filtering notifications -->
+    <div class="row justify-content-center mb-4">
+        <!-- Add more buttons if needed -->
+    </div>
+
+    <!-- Container for displaying notifications -->
+    <div class="notification-container">
+        {% for notification in notifications %}
+            {% if notification.notification_type == 'request_item' %}
+                <!-- Render notification card for item requests -->
+                <a href="{% url 'notification_detail' notification.id %}" onclick="handleNotificationClick('{{ notification.id }}', this)" class="notification-card {% if notification.is_read %}read{% else %}unread{% endif %}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title {% if not notification.is_read %}font-weight-bold{% endif %} text-primary">{{ notification.title }}</h5>
+                            <p class="card-text {% if not notification.is_read %}font-weight-bold{% endif %} text-dark">{{ notification.message }}</p>
+                            <small class="text-muted">{{ notification.timestamp | date:"F d, Y h:i A" }}</small>
+                        </div>
+                    </div>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<script>
+    function markNotificationsAsRead() {
+        const markAsReadUrl = '/mark_notifications_as_read/';
+
+        fetch(markAsReadUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('notificationCount').innerText = '0';
+                document.getElementById('notificationCount').style.display = 'none';
+                document.querySelectorAll('.card.unread').forEach(card => {
+                    card.classList.remove('unread');
+                    card.querySelector('.card-text').classList.remove('font-weight-bold');
+                });
+            } else {
+                console.error('Failed to mark notifications as read.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    // Inside handleNotificationClick function
+    function handleNotificationClick(notificationId, card) {
+        const markAsReadUrl = `/mark_notifications_as_read/${notificationId}/`;
+
+        fetch(markAsReadUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken'),
+            },
+            body: JSON.stringify({}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                card.classList.remove('unread');
+                card.querySelector('.card-text').classList.remove('font-weight-bold');
+                
+                // Redirect to the notification detail page
+                window.location.href = `/notification_detail/${notificationId}/`;
+            } else {
+                console.error('Failed to mark notification as read.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationContainer = document.querySelector('.notification-container');
+        if (notificationContainer) {
+            notificationContainer.classList.add('rounded', 'shadow', 'p-3', 'bg-light');
+        }
+    });
+</script>
+
+<!-- Include JavaScript at the end if needed -->
+{% endblock %}

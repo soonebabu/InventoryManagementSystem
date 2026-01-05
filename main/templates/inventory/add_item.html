@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .custom-form-label {
+        min-width: 300px; /* Adjust the width based on the longest label */
+        display: inline-block;
+        font-size: 20px; /* Increase the font size */
+    }
+
+    .custom-form-control {
+        width: calc(100% - 300px); /* Adjust the width as needed */
+        max-width: 400px; /* Adjust the max-width as needed */
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    .custom-card-header {
+        background-color: #17a2b8;
+        color: white;
+        text-align: center;
+    }
+
+    /* Increase the font size for all text inside the form */
+    form .form-label,
+    form .form-check-label,
+    form .btn {
+        font-size: 20px; /* Increase the font size */
+    }
+</style>
+
+<div class="container mt-4" style="margin-bottom=250px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+                 <!-- Card for ADD ITEMS IN BULK -->
+                 <div class="card mb-4">
+                    <div class="card-header custom-card-header">
+                        <h3>ADD ITEMS IN BULK / बल्क मा वस्तु थप्नुहोस्</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'bulk_add_items' %}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="file" class="form-label custom-form-label">Upload Excel File / एक्सेल फाइल अपलोड गर्नुहोस्:</label>
+                                <div class="custom-form-control">
+                                    <input type="file" name="file" id="file" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <p><a href="{% static 'sample_data.xlsx' %}" download>Download a sample Excel file</a></p>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Submit / पेश गर्ने</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            <div class="card">                                 
+                <div class="card-header custom-card-header">
+                    <h3>ADD ITEMS ONE BY ONE / एक-एक गरी वस्तु थप्नुहोस्</h3>
+                </div>
+                <div class="card-body">
+                   
+
+                    
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        {% comment %} {{ form.hidden_fields }} {% endcomment %}
+
+
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label custom-form-label">Item Name / नाम :</label>
+                            <div class="custom-form-control">
+                                {{ form.name }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.name.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label custom-form-label">Item Description / विवरण :</label>
+                            <div class="custom-form-control">
+                                {{ form.description }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.description.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                        
+
+                        <div class="mb-3">
+                            <label class="form-label custom-form-label">Consumable / खपत :</label>
+                            <div class="custom-form-control">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="form-check">
+                                            <input type="radio" id="consumable_true" name="consumable" value="Consumable" class="form-check-input" {% if form.consumable.value|default:'' == 'True' %}checked{% endif %}>
+                                            <label for="consumable_true" class="form-check-label">Consumable</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="form-check">
+                                            <input type="radio" id="consumable_false" name="consumable" value="Non-Consumable" class="form-check-input" {% if form.consumable.value|default:'' == 'False' %}checked{% endif %}>
+                                            <label for="consumable_false" class="form-check-label">Non-Consumable</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="jinsiNumberField" class="mb-3" style="display: none;">
+                            <label for="{{ form.jinsi_no.id_for_label }}" class="form-label custom-form-label">Jinsi Number / जिन्सी न.:</label>
+                            <div class="custom-form-control">
+                                {{ form.jinsi_no }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.jinsi_no.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                        <script>
+                            // Function to show or hide fields based on the selected radio button
+                            function toggleFields() {
+                                var consumableValue = document.querySelector('input[name="consumable"]:checked').value;
+                                if (consumableValue === 'Non-Consumable') {
+                                    document.getElementById('jinsiNumberField').style.display = 'block';
+                                } else {
+                                    document.getElementById('jinsiNumberField').style.display = 'none';
+                                }
+                            }
+                        
+                            // Event listener for radio button change
+                            var radioButtons = document.querySelectorAll('input[name="consumable"]');
+                            radioButtons.forEach(function(radioButton) {
+                                radioButton.addEventListener('change', toggleFields);
+                            });
+                        
+                            // Initial invocation of toggleFields function
+                            toggleFields();
+                        </script>
+                        
+                        
+                        
+
+                        <div class="mb-3">
+                            <label class="form-label custom-form-label">Category / श्रेणी :</label>
+                            <div class="custom-form-control">
+                                {{ form.category }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.category.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style>
+                                
+                            </div>
+                        </div>
+
+
+                      
+                        <div class="mb-3">
+                            <label for="{{ form.quantity.id_for_label }}" class="form-label custom-form-label">Quantity / इकाई :</label>
+                            <div class="custom-form-control">
+                                {{ form.quantity }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.quantity.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label custom-form-label">Unit / श्रेणी :</label>
+                            <div class="custom-form-control">
+                                {{ form.unit }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.unit.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style>
+                            </div>
+                        </div>
+                        
+                        <script>
+                            // Function to set default values and make fields uneditable for non-consumable items
+                            function setNonConsumableDefaults() {
+                                // Set Quantity to 1 and make it uneditable
+                                document.getElementById('id_quantity').value = 1;
+                                document.getElementById('id_quantity').setAttribute('readonly', 'readonly');
+                                // Set Unit to pcs and make it uneditable
+                                document.getElementById('id_unit').value = 'Pcs';
+                                document.getElementById('id_unit').setAttribute('readonly', 'readonly');
+                            }
+                        
+                            // Function to make fields editable for consumable items
+                            function setConsumableDefaults() {
+                                // Make Quantity editable
+                                document.getElementById('id_quantity').removeAttribute('readonly');
+                                // Make Unit editable
+                                document.getElementById('id_unit').removeAttribute('readonly');
+                            }
+                        
+                            // Function to toggle fields based on the selected radio button
+                            function toggleFields() {
+                                var consumableValue = document.querySelector('input[name="consumable"]:checked').value;
+                                if (consumableValue === 'Non-Consumable') {
+                                    setNonConsumableDefaults();
+                                } else {
+                                    setConsumableDefaults();
+                                }
+                            }
+                        
+                            // Event listener for radio button change
+                            var radioButtons = document.querySelectorAll('input[name="consumable"]');
+                            radioButtons.forEach(function(radioButton) {
+                                radioButton.addEventListener('change', toggleFields);
+                            });
+                        
+                            // Initial invocation of toggleFields function
+                            toggleFields();
+                        </script>
+                        
+
+                        <div class="mb-3">
+                            <label for="{{ form.condition.id_for_label }}" class="form-label custom-form-label">Condition / अवस्था :</label>
+                            <div class="custom-form-control">
+                                {{ form.condition }}
+                                <style>
+                                    /* Adjust the width of the input field */
+                                    #{{ form.condition.id_for_label }} {
+                                        width: 100%; /* Set the desired width */
+                                        max-width: 600px; /* Set the maximum width if needed */
+                                    }
+                                </style> 
+                            </div>
+                        </div>
+                        
+
+                        <div class="mb-3">
+                            <label for="{{ form.additem_photo.id_for_label }}" class="form-label custom-form-label">Photo / फोटो:</label>
+                            <div class="custom-form-control">
+                                {{ form.additem_photo }}
+                            </div>
+                        </div>
+
+                        {% comment %} {% if 'FSCMO' in allowed_groups %}
+                            <div class="mb-3">
+                                <label for="assigned_office" class="form-label custom-form-label">Assign to Office / कार्यालयमा नियुक्त गर्नुहोस्:</label>
+                                <div class="custom-form-control">
+                                    <select name="assigned_office" id="assigned_office" class="form-select">
+                                        <optgroup label="Groups">
+                                            {% for group in groups %}
+                                                <option value="{{ group.name }}">{{ group.name }}</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                        <optgroup label="Subgroups">
+                                            {% for subgroup in subgroups %}
+                                                <option value="{{ subgroup.name }}">{{ subgroup.name }}</option>
+                                            {% endfor %}
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                        {% endif %} {% endcomment %}
+
+                      
+
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit / पेश गर्ने</button>
+                        </div>
+                        <div style="margin-bottom: 250px;"></div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

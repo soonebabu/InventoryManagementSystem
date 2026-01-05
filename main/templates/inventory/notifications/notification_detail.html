@@ -1,0 +1,43 @@
+<!-- notification_detail.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+
+    <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+        <div class="card-body text-center">
+          <h2 class="card-title">NOTIFICATION DETAIL</h2>
+        </div>
+      </div>
+      <div style="margin-bottom: 20px;"></div>
+
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title {% if not notification.is_read %}font-weight-bold{% endif %} text-primary">{{ notification.title }}</h5>
+            <p class="card-text {% if not notification.is_read %}font-weight-bold{% endif %} text-dark">{{ notification.message }}</p>
+            <small class="text-muted">{{ notification.timestamp | date:"F d, Y h:i A" }}</small>
+        </div>
+    </div>
+    <div>
+      {% if notification.notification_type == 'assign_item_store' %}
+          <a href="{% url 'confirm_assignment_for_store' notification.related_object_id %}" style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #007bff; color: white; text-align: center; text-decoration: none; border-radius: 5px;">Confirm / Reject</a>
+  
+      {% elif notification.notification_type == 'add_item' %}
+          <a href="{% url 'confirm_item' notification.related_object_id %}" style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #007bff; color: white; text-align: center; text-decoration: none; border-radius: 5px;">Confirm / Reject</a>
+      {% elif notification.notification_type == 'assign_item' %}
+          <a href="{% url 'confirm_assignment' notification.related_object_id %}" style="display: inline-block; padding: 10px 20px; margin: 5px; background-color: #007bff; color: white; text-align: center; text-decoration: none; border-radius: 5px;">Confirm / Reject</a>
+  
+      {% endif %}
+  </div>
+    {% comment %} <div>
+        {% if notification.notification_type == 'assign_item' %}
+            <a href="{% url 'confirm_assignment' notification.related_object_id %}">Confirm / Reject</a>
+        {% elif notification.notification_type == 'add_item' %}
+                  <a href="{% url 'confirm_item' notification.related_object_id %}">Confirm / Reject</a>
+        {% endif %}
+      </div> {% endcomment %}
+      
+</div>
+{% endblock %}

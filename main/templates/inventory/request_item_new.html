@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+    <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-header" style="background-color: #5bc0de;">
+            <h2 class="text-white text-center mb-0">Request Item</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'request_item' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="{{ form.item_name.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Item Name</label>
+                    <div class="custom-form-control">
+                        {{ form.item_name }}
+                        <style>
+                            #{{ form.item_name.id_for_label }} {
+                                width: 100%;
+                                max-width: 600px;
+                            }
+                        </style>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Description of Item</label>
+                    <div class="custom-form-control">
+                        {{ form.description }}
+                        <style>
+                            #{{ form.description.id_for_label }} {
+                                width: 100%;
+                                max-width: 600px;
+                            }
+                        </style>
+                    </div>
+                </div>
+
+                
+
+              
+                {% if user_subgroup_name %}
+
+                {% if form.subgroup_quantity %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.subgroup_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Subgroup Quantity</label>
+                        <div class="custom-form-control">
+                            {{ form.subgroup_quantity }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.unit.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Unit</label>
+                        <div class="custom-form-control">
+                            {{ form.unit }}
+                            <style>
+                                #{{ form.unit.id_for_label }} {
+                                    width: 100%;
+                                    max-width: 600px;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+                
+                {% if user_group_name and not user_subgroup_name %}
+                
+                {% if form.group_quantity %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.group_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Group Quantity</label>
+                        <div class="custom-form-control">
+                            {{ form.group_quantity }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="{{ form.unit.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Unit</label>
+                        <div class="custom-form-control">
+                            {{ form.unit }}
+                            <style>
+                                #{{ form.unit.id_for_label }} {
+                                    width: 100%;
+                                    max-width: 600px;
+                                }
+                            </style>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="{{ form.requestitem_photo.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Photo</label>
+                    <div class="custom-form-control">
+                        {{ form.requestitem_photo }}
+                    </div>
+                </div>
+
+                
+
+                {% comment %} {% if form.officer_quantity %}
+                <div class="mb-3">
+                    <label for="{{ form.officer_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Officer Quantity</label>
+                    <div class="custom-form-control">
+                        {{ form.officer_quantity }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if form.under_secretary_quantity %}
+                <div class="mb-3">
+                    <label for="{{ form.under_secretary_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Under Secretary Quantity</label>
+                    <div class="custom-form-control">
+                        {{ form.under_secretary_quantity }}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if form.joint_secretary_quantity %}
+                <div class="mb-3">
+                    <label for="{{ form.joint_secretary_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Joint Secretary Quantity</label>
+                    <div class="custom-form-control">
+                        {{ form.joint_secretary_quantity }}
+                    </div>
+                </div>
+                {% endif %} {% endcomment %}
+
+                {% if form.status_action %}
+                <div class="mb-3">
+                    <label for="{{ form.status_action.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Action</label>
+                    <div class="custom-form-control">
+                        {{ form.status_action }}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

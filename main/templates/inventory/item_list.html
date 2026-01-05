@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+  <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+    <div class="card-body text-center">
+      <h2 class="card-title">ITEM DETAILS</h2>
+    </div>
+  </div>
+  <div style="margin-bottom: 20px;"></div>
+
+  
+  
+  <div class="input-group mb-3 search-input-group">
+    <input type="text" id="searchInput" class="form-control search-input" style="text-align: center;" placeholder="Type to Search by Any Attribute">
+    <div class="input-group-append">
+      <span class="input-group-text search-icon">
+        <i class="fas fa-search" style="color: #000;"></i>
+      </span>
+    </div>
+  </div>
+  
+  <style>
+    .thead-custom {
+      background-color: #343a40; /* Dark background color */
+      color: #ffffff; /* Text color */
+      font-weight: bold; /* Bold text */
+    }
+  
+    .thead-custom th {
+      border: 1px solid #454d55; /* Border color */
+      padding: 10px; /* Adjust padding as needed */
+    }
+  </style>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="thead-custom">
+        <tr>
+          <th>SN</th>
+
+          <th>Name</th>
+          <th>Description</th>
+          <th>
+            Consumable
+            <select id="consumable_filter">
+              <option value="all">All</option>
+              <option value="Consumable">Consumable</option>
+              <option value="Non-Consumable">Non-Consumable</option>
+            </select>
+          </th>
+          <th>
+            Category
+            <select id="category_filter">
+              <option value="all">All</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Stationery">Stationery</option>
+              <option value="Decor">Decor</option>
+              <option value="Computer and Peripherals">Computer and Peripherals</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Cleaning">Cleaning</option>
+
+          <th>Quantity</th>
+          <th>
+            Condition
+            <select id="condition_filter">
+              <option value='all'>All</option>
+              <option value='New'>New</option>
+              <option value='Operational'>Operational</option>
+              <option value='Maintained'>Maintained</option>
+              <option value='Damaged'>Damaged</option>
+            </select>
+
+          </th>
+          <th>
+            Assigned Office
+            <select id="assignedoffice_filter">
+                <option value="all">All</option>
+                {% for office in assigned_offices %}
+                    <option value="{{ office }}">{{ office }}</option>
+                {% endfor %}
+            </select>
+        </th>
+        <th>Assigned By</th>
+          <th>Dates</th>
+          {% comment %} <th>Status</th> {% endcomment %}
+          <th>Photo</th>
+          {% comment %} <th>Edit</th> {% endcomment %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          {% if item.quantity > 0 %}
+            <tr>
+              <td class="serial-number"></td> <!-- Serial number column -->
+
+              <td class="primary-key" data-primary-key="{{ item.pk }}">{{ item.name }}</td>
+              <td>{{ item.description }} {% if item.consumable == 'Non-Consumable' %}({{ item.jinsi_no }}){% endif %}</td>
+              <td data-status="{{ item.consumable }}" class="consumable_filter">{{ item.consumable }}</td>
+              <td data-status="{{ item.category }}" class="category_filter">{{ item.category }}</td>
+
+              <td>{{ item.quantity }} {{item.unit}}</td>
+              <td data-status="{{ item.get_condition_display }}" class="condition_filter">{{ item.get_condition_display }}</td>
+              <td data-status="{{ item.assignedOffice }}" class="assignedoffice_filter">{{ item.assignedOffice }}</td>
+              <td >{{ item.assignedBy }}</td>
+
+              <td>
+                <a href="#" class="btn btn-primary details-btn" data-item-pk="{{ item.pk }}" data-toggle="modal" data-target="#detailsModal">Details</a>
+                <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+
+                {% comment %} <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true"> {% endcomment %}
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-center"><strong>Item Details</strong></h5>
+                      
+                      </div>
+                      <div class="modal-body">
+                        {% if item.storeDate %}
+                            <p>Store Entered Date: {{ item.storeDate }}</p>
+                        {% endif %}
+                        {% if item.assignedDateByStore %}
+                            <p>Assigned By Store Date: {{ item.assignedDateByStore }}</p>
+                        {% endif %}
+                        {% if item.assignedDateByGroup %}
+                            <p>Assigned By Group Date: {{ item.assignedDateByGroup }}</p>
+                        {% endif %}
+                        {% if item.returnDate %}
+                            <p>Store Return Date: {{ item.returnDate }}</p>
+                        {% endif %}
+                        {% if item.damagedDate %}
+                            <p>Damaged Date: {{ item.damagedDate }}</p>
+                        {% endif %}
+                        {% if item.maintainedDate %}
+                            <p>Maintained Date: {{ item.maintainedDate }}</p>
+                        {% endif %}
+
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary close-modal" data-dismiss="modal">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+
+              <script>
+                $(document).ready(function() {
+                    function updateSerialNumbers() {
+                        $('.table tbody tr:visible').each(function(index) {
+                            $(this).find('.serial-number').text(index + 1);
+                        });
+                    }
+            
+                    // Call the function initially
+                    updateSerialNumbers();
+            
+                    // Listen for changes in the filters
+                    $('#consumable_filter, #category_filter, #condition_filter, #assignedoffice_filter').change(function() {
+                        // After filtering, update the serial numbers
+                        updateSerialNumbers();
+                    });
+
+                    $('.details-btn').on('click', function(event) {
+                      event.preventDefault();
+                      
+                      var itemPk = $(this).data('item-pk');
+                      
+                      $.ajax({
+                          url: '{% url "get_item_details" 0 %}'.replace('0', itemPk),
+                          type: 'GET',
+                          dataType: 'json',
+                          success: function(data) {
+                              var dateInfoHtml = '';
+                              
+                              if (data.store_date) {
+                                  dateInfoHtml += '<p>Store Entered Date: ' + data.store_date + '</p>';
+                              }
+                              if (data.storeassigned_date) {
+                                  dateInfoHtml += '<p>Assigned By Store Date: ' + data.storeassigned_date + '</p>';
+                              }
+                              if (data.groupassigned_date) {
+                                  dateInfoHtml += '<p>Assigned By Group Date: ' + data.groupassigned_date + '</p>';
+                              }
+                              if (data.return_date) {
+                                  dateInfoHtml += '<p>Store Return Date: ' + data.return_date + '</p>';
+                              }
+                              if (data.damaged_date) {
+                                  dateInfoHtml += '<p>Damaged Date: ' + data.damaged_date + '</p>';
+                              }
+                              if (data.maintained_date) {
+                                  dateInfoHtml += '<p>Maintained Date: ' + data.maintained_date + '</p>';
+                              }
+                              
+                              // Update modal content with item details
+                              $('#detailsModal .modal-body').html(dateInfoHtml);
+                              // Show the modal
+                              $('#detailsModal').modal('show');
+                          },
+                          error: function(xhr, status, error) {
+                              console.error('Error fetching item details:', error);
+                          }
+                      });
+                  });
+                  
+                  $('.close-modal').on('click', function() {
+                      $('#detailsModal').modal('hide');
+                  });
+                  
+                });
+            </script>  
+            {% comment %} <td>{{item.status}}</td>  {% endcomment %}
+            
+              <td>
+                {% if item.additem_photo or item.returnitem_photo or item.changestatus_photo %}
+                  <a href="{% url 'photo_list' item.pk %}" class="btn btn-primary">View Photos</a>
+                
+                {% endif %}
+            </td>
+
+            {% if 'FSCMO' in user_groups %}
+            <td>
+              <form method="post" action="{% url 'delete_item' item.pk %}" style="display:inline;" onsubmit="return confirmDelete()">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger btn-sm">
+                      <i class="fas fa-trash-alt"></i> Delete
+                  </button>
+              </form>
+          </td>
+          <script type="text/javascript">
+            function confirmDelete() {
+                return confirm('Are you sure you want to delete this item?');
+            }
+        </script>
+              {% endif %}
+              {% comment %} {% if not user_subgroup_name %}
+              <td>
+                  <a href="{% url 'edit_item' item.pk %}" class="btn btn-warning">Edit</a>
+                </td>
+              {% else %}
+                <td></td>
+              {% endif %} {% endcomment %}
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% comment %} {% with user_groups=request.user.groups.all %}
+  <div class="text-center mt-4">
+    
+
+
+    {% if user_subgroup_name %}
+      <a href="{% url 'return_item_list' %}" class="btn btn-danger">Return Item List</a>
+    {% elif user_group_name == 'FSCMO'%}
+      <a href="{% url 'assign_item_by_store' %}" class="btn btn-primary">Assign Item</a>
+    {% else %}
+      <a href="{% url 'assign_item' %}" class="btn btn-primary">Assign Item</a>
+    {% endif %}
+    {% if user_group_name != 'FSCMO' and user_group_name != 'SUPERADMIN' and not user_subgroup_name %}
+      <a href="{% url 'return_item_list' %}" class="btn btn-danger">Return Item List</a>
+    {% endif %}
+
+
+  </div>
+{% endwith %} {% endcomment %}
+
+{% with user_groups=request.user.groups.all %}
+  <div class="text-center mt-4">
+    {% if user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY'  %}
+      {% if user_subgroup_name %}
+        <a href="{% url 'return_item_list' %}" class="btn btn-danger">Return Item List</a>
+      {% elif user_group_name == 'FSCMO' %}
+        <a href="{% url 'assign_item_by_store' %}" class="btn btn-primary">Assign Item</a>
+      {% else %}
+        <a href="{% url 'assign_item' %}" class="btn btn-primary">Assign Item</a>
+      {% endif %}
+      {% if user_group_name != 'FSCMO' and user_group_name != 'SUPERADMIN' and not user_subgroup_name %}
+        <a href="{% url 'return_item_list' %}" class="btn btn-danger">Return Item List</a>
+      {% endif %}
+    {% endif %}
+  </div>
+{% endwith %}
+
+ 
+
+  <script>
+    // JavaScript to handle the view photo button click event
+    
+    $('#consumable_filter').on('change', function () {
+      var selectedStatus = $(this).val();
+      console.log('Selected Status:', selectedStatus);
+
+      if (selectedStatus === 'all') {
+        // Show all rows if "all" is selected
+        $('table tbody tr').show();
+      } else {
+        // Hide rows that don't match the selected status
+        $('table tbody tr').each(function () {
+          var itemStatus = $(this).find('.consumable_filter').text();
+          if (itemStatus === selectedStatus) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      }
+    });
+    $('#category_filter').on('change', function () {
+      var selectedStatus = $(this).val();
+      console.log('Selected Status:', selectedStatus);
+
+      if (selectedStatus === 'all') {
+        // Show all rows if "all" is selected
+        $('table tbody tr').show();
+      } else {
+        // Hide rows that don't match the selected status
+        $('table tbody tr').each(function () {
+          var itemStatus = $(this).find('.category_filter').text();
+          if (itemStatus === selectedStatus) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      }
+    });
+    $('#condition_filter').on('change', function () {
+      var selectedStatus = $(this).val();
+      console.log('Selected Status:', selectedStatus);
+
+      if (selectedStatus === 'all') {
+        // Show all rows if "all" is selected
+        $('table tbody tr').show();
+      } else {
+        // Hide rows that don't match the selected status
+        $('table tbody tr').each(function () {
+          var itemStatus = $(this).find('.condition_filter').text();
+          if (itemStatus === selectedStatus) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      }
+    });
+    $('#assignedoffice_filter').on('change', function () {
+      var selectedStatus = $(this).val();
+      console.log('Selected Status:', selectedStatus);
+
+      if (selectedStatus === 'all') {
+        // Show all rows if "all" is selected
+        $('table tbody tr').show();
+      } else {
+        // Hide rows that don't match the selected status
+        $('table tbody tr').each(function () {
+          var itemStatus = $(this).find('.assignedoffice_filter').text();
+          if (itemStatus === selectedStatus) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      }
+    });
+
+  </script>
+  {% comment %} {% if not user_subgroup_name %}
+  {% with user_groups=request.user.groups.all %} {% endcomment %}
+  {% if user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY'  %}
+    <a href="{% url 'filter_items' %}" class="btn btn-primary">Filter Items</a>
+  {% endif %}
+  {% comment %} {% endwith %}
+{% endif %} {% endcomment %}
+
+
+</div>
+
+{% endblock %}
+
+

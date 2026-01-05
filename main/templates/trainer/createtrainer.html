@@ -1,0 +1,15 @@
+<!-- create_trainer.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Trainer</title>
+</head>
+<body>
+    <h1>Create Trainer</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Create Trainer</button>
+    </form>
+</body>
+</html>

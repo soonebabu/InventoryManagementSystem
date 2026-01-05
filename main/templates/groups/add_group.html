@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5" style="margin-bottom:200px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-4">
+                <div class="card-header" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+                    <div class="card-body text-center">
+                        <h2 class="card-title text-white text-center" style = "color:white;">ADD GROUP</h2>
+                      </div>
+                </div>
+                <div style="margin-bottom: 20px;"></div>
+
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="id_name" class="col-sm-3 col-form-label text-md-right font-weight-bold">Group Name:</label>
+                            <div class="col-sm-9">
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ form.name.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="{% url 'group_list' %}" class="btn btn-primary">Go to Group List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

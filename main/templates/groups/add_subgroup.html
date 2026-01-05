@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .custom-form-label {
+        min-width: 180px; /* Adjust the width based on the longest label */
+        display: inline-block;
+    }
+</style>
+<div class="container mt-5" style="margin-bottom:200px;">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card mt-4"> <!-- Added the card class here -->
+                <div class="card-header" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+                    <div class="card-body text-center">
+
+                    <h2 class="card-title text-white text-center">ADD SUBGROUP</h2>
+                </div>
+            </div>
+                <div style="margin-bottom: 20px;"></div>
+
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="id_name" class="fw-bold custom-form-label">Subgroup Name:</label>
+                            {{ form.name }}
+                        </div>
+                        <div class="mb-3"></div>
+
+                        <div class="form-group">
+                            <label for="id_parent_group" class="fw-bold custom-form-label">Parent Group:</label>
+
+                            {{ form.parent_group }}
+                            <style>
+                                #id_parent_group {
+                                    width: 26%; 
+                                }
+                            </style>
+                        </div>
+                        <div class="mb-3"></div>
+                        {% if form.errors %}
+    <div class="alert alert-danger">
+      <strong>Error:</strong> Please correct the following errors.
+      <ul>
+        {% for field, errors in form.errors.items %}
+          {% for error in errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-block mt-3">Save</button>
+                            <div class="mb-3"></div>
+                            <div class="form-group">
+                                <a href="{% url 'subgroup_list' %}" class="btn btn-primary">List Subgroups</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

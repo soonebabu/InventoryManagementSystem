@@ -1,0 +1,110 @@
+
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-header" style="background-color: #5bc0de;">
+            <h2 class="text-white text-center mb-0">Request Item</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" action="{% url 'request_item' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+              
+
+                <div class="mb-3">
+                    <label for="{{ form.name.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Item Name</label>
+                    <div class="custom-form-control">
+                        {{ form.name }}
+                        <style>
+                            /* Adjust the width of the input field */
+                            #{{ form.name.id_for_label }} {
+                                width: 100%; /* Set the desired width */
+                                max-width: 600px; /* Set the maximum width if needed */
+                            }
+                        </style>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Description of Item</label>
+                    <div class="custom-form-control">
+                        {{ form.description }}
+                        <style>
+                            /* Adjust the width of the input field */
+                            #{{ form.description.id_for_label }} {
+                                width: 100%; /* Set the desired width */
+                                max-width: 600px; /* Set the maximum width if needed */
+                            }
+                        </style>
+                    </div>
+                </div>
+
+
+             
+
+                <style>
+                    /* Adjust the width of the input field */
+                    .form-group input[type="text"] {
+                        width: 100%; /* Set the desired width */
+                        max-width: 300px; /* Set the maximum width if needed */
+                    }
+                    .form-group select {
+                        width: 100%; /* Set the desired width */
+                        max-width: 300px; /* Set the maximum width if needed */
+                    }
+                    
+                </style>
+
+                <div class="mb-3">
+                    <label for="{{ form.quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Quantity</label>
+                    <div class="custom-form-control">
+                        {{ form.quantity }}
+                        <style>
+                            /* Adjust the width of the input field */
+                            #{{ form.quantity.id_for_label }} {
+                                width: 100%; /* Set the desired width */
+                                max-width: 600px; /* Set the maximum width if needed */
+                            }
+                        </style>
+                    </div>
+                </div>
+
+             
+
+                <div class="mb-3">
+                    <label for="{{ form.unit.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Unit</label>
+                    <div class="custom-form-control">
+                        {{ form.unit }}
+                        <style>
+                            /* Adjust the width of the input field */
+                            #{{ form.unit.id_for_label }} {
+                                width: 100%; /* Set the desired width */
+                                max-width: 600px; /* Set the maximum width if needed */
+                            }
+                        </style>
+                    </div>
+                </div>
+
+    
+
+                <div class="form-group mb-4">
+                    <label for="{{ form.requestitem_photo.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Photo/फोटो:</label>
+                    <div class="d-inline-block align-middle" style="width: 20px;"></div> <!-- Adjust width as needed -->
+                    {{ form.requestitem_photo }}
+                </div>
+                
+
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

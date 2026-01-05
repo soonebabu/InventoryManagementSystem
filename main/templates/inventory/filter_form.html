@@ -1,0 +1,98 @@
+<!-- filter_form.html -->
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Filter Items</h2>
+      <form method="get" action="{% url 'export_filtered_to_excel' %}">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="start_date" class="form-label">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="end_date" class="form-label">End Date:</label>
+            <input type="date" id="end_date" name="end_date" class="form-control">
+          </div>
+        </div>
+        {% if allowed_offices %}
+        <div class="mb-3">
+          <label for="assigned_office" class="form-label">Assigned Office:</label>
+          <select id="assigned_office" name="assigned_office" class="form-select">
+            <option value="">All</option>
+            {% for office in allowed_offices %}
+            <option value="{{ office }}">{{ office }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+        <button type="submit" class="btn btn-primary">Export to Excel</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% comment %} {% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+  <h2 class="text-center mb-4">Filter Items</h2>
+  <form method="get" action="{% url 'export_filtered_to_excel' %}">
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date">
+
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date">
+
+    {% if allowed_offices %}
+      <label for="assigned_office">Assigned Office:</label>
+      <select id="assigned_office" name="assigned_office">
+        <option value="">All</option>
+        {% for office in allowed_offices %}
+          <option value="{{ office }}">{{ office }}</option>
+        {% endfor %}
+      </select>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Export to Excel</button>
+  </form>
+</div>
+{% endblock %} {% endcomment %}
+
+
+
+
+
+
+
+{% comment %} <!-- filter_form.html -->
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Filter Items</h2>
+  <form method="get" action="{% url 'export_filtered_to_excel' %}">
+    <!-- Your filtering form fields go here -->
+    <label for="start_date">Start Date:</label>
+    <input type="date" id="start_date" name="start_date">
+
+    <label for="end_date">End Date:</label>
+    <input type="date" id="end_date" name="end_date">
+
+    <label for="assigned_office">Assigned Office:</label>
+    <select id="assigned_office" name="assigned_office">
+      <option value="">All</option>
+      <!-- Add options dynamically based on available assigned offices -->
+      {% for office in assigned_offices %}
+        <option value="{{ office }}">{{ office }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="btn btn-primary">Export to Excel</button>
+  </form>
+</div>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+    <main>
+		<section class="container my-4" style="margin-bottom:200px;">
+			<div class="row">
+				<div class="col-9">
+						<div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+						  <div class="card-body text-center">
+							<h2 class="card-title" style = "color:white;">UPDATE USER'S PROFILE</h2>
+						  </div>
+						</div>
+						<div style="margin-bottom: 20px;"></div>
+											{% if msg %}
+					<p class="text-success">{{ msg }}</p>
+					{% endif %}
+					<form method="post" action="" class="text-center">
+						<table class="table table-bordered mx-auto">
+							{% csrf_token %}
+							<tr>
+								<th>First name:</th>
+								<td>{{ form.first_name }}</td>
+							</tr>
+							<tr>
+								<th>Last name:</th>
+								<td>{{ form.last_name }}</td>
+							</tr>
+							<tr>
+								<th>Email address:</th>
+								<td>{{ form.email }}</td>
+							</tr>
+							<tr>
+								<th>Username:</th>
+								<td>{{ form.username }}</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<button type="button" class="btn btn-primary" onclick="togglePasswordFields()">Change Password</button>
+								</td>
+							</tr>
+							<tr id="passwordFields">
+								<th>New Password:</th>
+								<td>{{ form.password1 }}</td>
+							</tr>
+							<tr id="confirmPasswordField">
+								<th>Confirm New Password:</th>
+								<td>{{ form.password2 }}</td>
+							</tr>
+							{% for field, errors in form.errors.items %}
+								{% if field == 'password2' %}
+									<tr>
+										<td colspan="2" class="text-danger">{{ errors }}</td>
+									</tr>
+								{% endif %}
+							{% endfor %}
+							<tr>
+								<td colspan="2">
+									<input type="submit" class="btn btn-primary" />
+								</td>
+							</tr>
+						</table>
+					</form>
+					<script>
+						document.addEventListener('DOMContentLoaded', function() {
+							const passwordFields = document.getElementById('passwordFields');
+							const confirmPasswordField = document.getElementById('confirmPasswordField');
+							
+							// Initially hide the password fields
+							passwordFields.style.display = 'none';
+							confirmPasswordField.style.display = 'none';
+						});
+					
+						function togglePasswordFields() {
+							const passwordFields = document.getElementById('passwordFields');
+							const confirmPasswordField = document.getElementById('confirmPasswordField');
+							
+							// Toggle the display property based on the button click
+							const displayValue = passwordFields.style.display === 'none' ? 'table-row' : 'none';
+							passwordFields.style.display = displayValue;
+							confirmPasswordField.style.display = displayValue;
+							
+							// Disable or enable password input fields based on display value
+							const isDisabled = displayValue === 'none';
+							passwordFields.querySelector('input').disabled = isDisabled;
+							confirmPasswordField.querySelector('input').disabled = isDisabled;
+						}
+					</script>
+					
+					
+				</div>
+			</div>
+		</section>
+    </main>
+{% endblock %}

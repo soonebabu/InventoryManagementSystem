@@ -1,0 +1,10 @@
+<div class="list-group">
+	{% comment %} <a href="{% url 'user_dashboard' %}" class="list-group-item {% if request.path == '/user-dashboard' %} active {% endif %}">Dashboard</a> {% endcomment %}
+	<a href="{% url 'update_user_profile' %}" class="list-group-item {% if request.path == '/update-user-profile' %} active {% endif %}" style="font-weight: bold;">Profile</a>
+	<a href="{% url 'reset_user_password' %}" class="list-group-item {% if request.path == '/reset-password' %} active {% endif %}" style="font-weight: bold;">Reset Password</a>
+
+	{% comment %} <a href="{% url 'password_change' %}" class="list-group-item {% if request.path == '/accounts/password_change/' %} active {% endif %}">Change Password</a> {% endcomment %}
+	{% comment %} <a href="{% url 'notifs' %}" class="list-group-item {% if request.path == '/notifs' %} active {% endif %}">Notifications <span class="float-end badge bg-info mt-1">{{total_unread}}</span></a> {% endcomment %}
+	{% comment %} <a href="#" class="list-group-item">Messages</a> {% endcomment %}
+	{% comment %} <a href="{% url 'report_for_trainer' %}" class="list-group-item {% if request.path == '/report_for_trainer' %} active {% endif %}">Report for Trainer</a> {% endcomment %}
+</div>

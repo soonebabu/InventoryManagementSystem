@@ -1,0 +1,97 @@
+<!-- inventory/request_item_list.html -->
+
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+  <div class="card text-white" style="background-color: #5bc0de;">
+    <div class="card-body text-center">
+      <h2 class="card-title">Item Requests Received</h2>
+    </div>
+  </div>
+  <div style="margin-bottom: 20px;"></div>
+  
+  {% comment %} <div class="input-group mb-3 search-input-group">
+    <input type="text" id="searchInput" class="form-control search-input" style="text-align: center;" placeholder="Type to Search by Any Attribute">
+    <div class="input-group-append">
+      <span class="input-group-text search-icon">
+        <i class="fas fa-search" style="color: #000;"></i>
+      </span>
+    </div>
+  </div> {% endcomment %}
+  
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>SN</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Condition</th>
+          <th>Request Date</th>
+          <th>Requested By</th>
+          <th>Photo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in all_request_items %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.category }}</td>  
+          <td>{{ item.quantity }} {{ item.unit }}</td>
+          <td>{{ item.requestDate }}</td>
+          <td>{{ item.requested_by.username }}</td>
+          <td>
+            {% if item.requestitem_photo %}
+            <button type="button" class="btn btn-primary" onclick="openModal('{{ item.requestitem_photo.url }}')">View Photo</button>
+            {% else %}
+            No Photo Available
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="photoModalLabel">Item Photo</h5>
+                {% comment %} <button type="button" class="close" data-dismiss="modal" aria-label="Close"> {% endcomment %}
+                    {% comment %} <span aria-hidden="true">&times;</span> {% endcomment %}
+                </button>
+            </div>
+            <div class="modal-body">
+                <img src="" id="photoModalImage" class="img-fluid" alt="Item Photo">
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!-- Include Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function openModal(photoUrl) {
+        // Set the image source
+        $('#photoModalImage').attr('src', photoUrl);
+        // Open the modal
+        $('#photoModal').modal('show');
+    }
+
+    // Add event listener to reset the modal content when modal is closed
+    
+</script>
+{% endblock %}
+
+

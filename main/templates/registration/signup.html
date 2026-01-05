@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+{% block content %}
+<main>
+    <section class="container my-4" style="margin-bottom:200px;">
+            <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+                <div class="card-body text-center">
+                  <h2 class="card-title" style = "color:white;">REGISTER</h2>
+                </div>
+              </div>
+              <div style="margin-bottom: 20px;"></div>        
+              <div class="row">
+            <div class="col-md-6 offset-3">
+                {% if msg %}
+                    <p class="text-success">{{msg}}</p>
+                {% endif %}
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <table class="table table-bordered">
+                        {{form.first_name.errors}}
+                        <tr>
+                            <th><label for="{{ form.first_name.id_for_label }}">First Name:</label></th>
+                            <td>{{ form.first_name }}</td>
+                        </tr>
+                        {{form.last_name.errors}}
+                        <tr>
+                            <th><label for="{{ form.last_name.id_for_label }}">Last Name:</label></th>
+                            <td>{{ form.last_name }}</td>
+                        </tr>
+                        {{form.email.errors}}
+                        <tr>
+                            <th><label for="{{ form.email.id_for_label }}">Email:</label></th>
+                            <td>{{ form.email }}</td>
+                        </tr>
+                        {{form.username.errors}}
+                        <tr>
+                            <th><label for="{{ form.username.id_for_label }}">Username:</label></th>
+                            <td>{{ form.username }}</td>
+                        </tr>
+                        {{form.password1.errors}}
+                        <tr>
+                            <th><label for="{{ form.password1.id_for_label }}">Password:</label></th>
+                            <td>{{ form.password1 }}</td>
+                        </tr>
+                        {{form.password2.errors}}
+                        <tr>
+                            <th><label for="{{ form.password2.id_for_label }}">Confirm Password:</label></th>
+                            <td>{{ form.password2 }}</td>
+                        </tr>
+                        <tr>
+                            <th><label for="{{ form.group.id_for_label }}">Group:</label></th>
+                            <td>{{ form.group }}</td>
+                        </tr>
+                        
+                        <style>
+                            #{{ form.group.id_for_label }} {
+                                width: 61%;
+                            }
+                        </style>
+                        
+                        <tr>
+                            <th>Require Subgroup:</th>
+                            <td><input type="checkbox" id="id_require_subgroup"></td>
+                        </tr>
+                        <style> /* Increase the size of the checkbox */
+                            input[type="checkbox"] {
+                              width: 20px; /* Adjust width as needed */
+                              height: 20px; /* Adjust height as needed */
+                            }
+                             </style>
+                             <tr id="id_subgroup_field" style="display: none;">
+                                <th><label for="{{ form.subgroup.id_for_label }}">Subgroup:</label></th>
+                                <td>
+                                    <select name="subgroup"> <!-- Corrected: Added name attribute -->
+
+                                    {% comment %} <select id="{{ form.subgroup.id_for_label }}"> {% endcomment %}
+                                        <option value="" disabled selected>Select a subgroup</option> <!-- Placeholder option -->
+                                        {% for subgroup in form.subgroup.field.queryset %}
+                                            <option value="{{ subgroup.id }}">{{ subgroup.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                            
+                        {% comment %} <tr id="id_subgroup_field" style="display: none;">
+                            <th><label for="{{ form.subgroup.id_for_label }}">Subgroup:</label></th>
+                            <td>{{ form.subgroup }}</td>
+                        </tr> {% endcomment %}
+                        <style>
+                            #{{ form.subgroup.id_for_label }} {
+                                width: 61%;
+                            }
+                        </style>
+                        <tr>
+                            <td colspan="2" style="text-align:center;">
+                                <input type="submit" class="btn btn-primary" value="Register" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const requireSubgroupCheckbox = document.getElementById('id_require_subgroup');
+        const subgroupField = document.getElementById('id_subgroup_field');
+        const groupSelect = document.getElementById('{{ form.group.id_for_label }}');
+        const subgroupSelect = document.getElementsByName("subgroup")[0]; // Change this line
+
+        requireSubgroupCheckbox.addEventListener('change', function () {
+            if (requireSubgroupCheckbox.checked) {
+                subgroupField.style.display = 'table-row';
+                fetchSubgroups();
+            } else {
+                subgroupField.style.display = 'none';
+                // Clear the subgroup selection when checkbox is unchecked
+                subgroupSelect.innerHTML = '<option value="" disabled selected>Select a subgroup</option>';
+            }
+        });
+
+        groupSelect.addEventListener('change', function () {
+            if (requireSubgroupCheckbox.checked) {
+                fetchSubgroups();
+            }
+        });
+
+        function fetchSubgroups() {
+            if (!requireSubgroupCheckbox.checked) {
+                return; // Do nothing if checkbox is not checked
+            }
+            const selectedGroup = groupSelect.value;
+            fetch(`/fetch_subgroups?group=${selectedGroup}`)
+                .then(response => response.json())
+                .then(data => {
+                    subgroupSelect.innerHTML = ''; // Clear existing options
+                    data.forEach(subgroup => {
+                        const option = document.createElement('option');
+                        option.value = subgroup.id;
+                        option.text = subgroup.name;
+                        subgroupSelect.appendChild(option); // Append new options
+                    });
+                })
+                .catch(error => console.error('Error fetching subgroups:', error));
+        }
+    });
+</script>
+
+
+{% comment %} <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const requireSubgroupCheckbox = document.getElementById('id_require_subgroup');
+        const subgroupField = document.getElementById('id_subgroup_field');
+        const groupSelect = document.getElementById('{{ form.group.id_for_label }}');
+        const subgroupSelect = document.getElementsByName("subgroup")[0]; // Change this line
+
+      //  const subgroupSelect = document.getElementById('{{ form.subgroup.id_for_label }}');
+
+        requireSubgroupCheckbox.addEventListener('change', function () {
+            if (requireSubgroupCheckbox.checked) {
+                subgroupField.style.display = 'table-row';
+                fetchSubgroups();
+            } else {
+                subgroupField.style.display = 'none';
+            }
+        });
+
+        groupSelect.addEventListener('change', fetchSubgroups);
+
+        function fetchSubgroups() {
+            const selectedGroup = groupSelect.value;
+            fetch(`/fetch_subgroups?group=${selectedGroup}`)
+                .then(response => response.json())
+                .then(data => {
+                    subgroupSelect.innerHTML = ''; // Clear existing options
+                    data.forEach(subgroup => {
+                        const option = document.createElement('option');
+                        option.value = subgroup.id;
+                        option.text = subgroup.name;
+                        subgroupSelect.appendChild(option); // Append new options
+                    });
+                })
+                .catch(error => console.error('Error fetching subgroups:', error));
+        }
+    });
+</script> {% endcomment %}
+
+{% endblock %}
+
+
+
+
+
+
+
+
+{% comment %} {% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+        <!-- Main Start -->
+        <main>
+            <!-- Services -->
+            <section class="container my-4">
+                <h1 class="text-center mb-4 section-heading border-bottom pb-2">Register</h1>
+                <div class="row">
+                    <div class="col-md-6 offset-3">
+                        {% if msg %}
+                        <p class="text-success">{{msg}}</p>
+                        {% endif %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <table class="table table-bordered">
+                                {{form.first_name.errors}}
+                                <tr>
+                                    <th><label for="{{ form.first_name.id_for_label }}">First Name:</label></th>
+                                    <td>{{ form.first_name }}</td>
+                                </tr>
+                                {{form.last_name.errors}}
+                                <tr>
+                                    <th><label for="{{ form.last_name.id_for_label }}">Last Name:</label></th>
+                                    <td>{{ form.last_name }}</td>
+                                </tr>
+                                {{form.email.errors}}
+                                <tr>
+                                    <th><label for="{{ form.email.id_for_label }}">Email:</label></th>
+                                    <td>{{ form.email }}</td>
+                                </tr>
+                                {{form.username.errors}}
+                                <tr>
+                                    <th><label for="{{ form.username.id_for_label }}">Username:</label></th>
+                                    <td>{{ form.username }}</td>
+                                </tr>
+                                {{form.password1.errors}}
+                                <tr>
+                                    <th><label for="{{ form.password1.id_for_label }}">Password:</label></th>
+                                    <td>{{ form.password1 }}</td>
+                                </tr>
+                                {{form.password2.errors}}
+                                <tr>
+                                    <th><label for="{{ form.password2.id_for_label }}">Confirm Password:</label></th>
+                                    <td>{{ form.password2 }}</td>
+                                </tr>
+                                <tr>
+									<th><label for="{{ form.group.id_for_label }}">User Group:</label></th>
+									<td>    {{ form.group.label_tag }} {{ form.group }} {# Render the group field #}
+									</td>
+								</tr>
+								
+                                <tr>
+                                    <td colspan="2">
+                                        <input type="submit" class="btn btn-primary" />
+                
+									</td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- End -->
+        </main>
+        <!-- End -->
+    {% else %}
+        <p>Already Logged In</p>
+    {% endif %}
+{% endblock %}
+
+ {% endcomment %}
+

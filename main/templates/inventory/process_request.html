@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+{% load custom_filters %}
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+    <div class="card" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-header" style="background-color: #5bc0de;">
+            <h2 class="text-white text-center mb-0">Process Item Request </h2>
+            <h5 class="text-white text-center mb-0" style="color:black;">{{ item_request.item_name }}</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="{{ form.item_name.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Item Name</label>
+                    <div class="custom-form-control">
+                        {{ form.item_name }}
+                        <style>
+                            #{{ form.item_name.id_for_label }} {
+                                width: 100%;
+                                max-width: 600px;
+                            }
+                        </style>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Description of Item</label>
+                    <div class="custom-form-control">
+                        {{ form.description }}
+                        <style>
+                            #{{ form.description.id_for_label }} {
+                                width: 100%;
+                                max-width: 600px;
+                            }
+                        </style>
+                    </div>
+                </div>
+
+                {% if role == 'group' or role == 'officer' or role == 'under_secretary' or role == 'joint_secretary' %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.subgroup_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Subgroup Quantity</label>
+                        <div class="custom-form-control d-flex align-items-center">
+                            <div class="me-2">
+                                {{ form.subgroup_quantity }}
+                            </div>
+                            <div>
+                                {{ form.instance.unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                {% endif %}
+                
+                {% if role == 'group' or role == 'officer' or role == 'under_secretary' or role == 'joint_secretary' %}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.group_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Group Quantity</label>
+                        <div class="custom-form-control d-flex align-items-center">
+                            <div class="me-2">
+                                {{ form.group_quantity }}
+                            </div>
+                            <div>
+                                {{ form.instance.unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% endif %}
+
+                {% if role == 'officer' %}
+    <div class="mb-3">
+        <label class="font-weight-bold text-primary custom-form-label">Item From</label>
+        <div>
+            {% for radio in form.available %}
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        {{ radio.tag }} {{ radio.choice_label }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div id="availableDescriptionField" class="mb-3" style="display: none;">
+        <label for="{{ form.available_description.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Description</label>
+        <div class="custom-form-control">
+            {{ form.available_description }}
+        </div>
+    </div>
+{% elif role == 'under_secretary' or role == 'joint_secretary' %}
+    <div class="mb-3">
+        <label class="font-weight-bold text-primary custom-form-label">Item From</label>
+        <div>
+            <p>{{ item_request.get_available_display }}</p>
+        </div>
+    </div>
+    <div id="availableDescriptionField" class="mb-3">
+        <label for="{{ form.available_description.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Description</label>
+        <div class="custom-form-control">
+            <p>{{ item_request.available_description }}</p>
+        </div>
+    </div>
+{% endif %}
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const availableRadios = document.querySelectorAll('input[name="available"]');
+        const availableDescriptionField = document.getElementById('availableDescriptionField');
+
+        function toggleDescriptionField() {
+            const selectedRadio = document.querySelector('input[name="available"]:checked');
+            if (selectedRadio) {
+                const selectedValue = selectedRadio.value;
+                console.log('Selected value:', selectedValue);  // Debugging statement
+                if (selectedValue === 'Others') {
+                    availableDescriptionField.style.display = 'block';
+                } else {
+                    availableDescriptionField.style.display = 'none';
+                }
+            } else {
+                console.log('No radio button is selected.');  // Debugging statement
+            }
+        }
+
+        // Initial check on page load
+        toggleDescriptionField();
+
+        // Add change event listeners to radio buttons
+        availableRadios.forEach(radio => {
+            radio.addEventListener('change', toggleDescriptionField);
+        });
+    });
+</script>
+
+                
+
+                {% if role == 'officer' or role == 'under_secretary' or role == 'joint_secretary' %}
+                    <div class="mb-3">
+                        <label for="{{ form.officer_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Officer Quantity</label>
+                        <div class="custom-form-control">
+                            {{ form.officer_quantity }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if role == 'under_secretary' or role == 'joint_secretary' %}
+                    <div class="mb-3">
+                        <label for="{{ form.under_secretary_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Under Secretary Quantity</label>
+                        <div class="custom-form-control">
+                            {{ form.under_secretary_quantity }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if role == 'joint_secretary' %}
+                    <div class="mb-3">
+                        <label for="{{ form.joint_secretary_quantity.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Joint Secretary Quantity</label>
+                        <div class="custom-form-control">
+                            {{ form.joint_secretary_quantity }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="mb-3">
+                    <label for="{{ form.requestitem_photo.id_for_label }}" class="font-weight-bold text-primary custom-form-label">Photo</label>
+                    <div class="custom-form-control">
+                        {% if form.instance.requestitem_photo %}
+                            <a href="#" data-toggle="modal" data-target="#photoModal">
+                                <img src="{{ form.instance.requestitem_photo.url }}" alt="Request Item Photo" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 10px;">
+                            </a>
+                            <a href="{{ form.instance.requestitem_photo.url }}" download>Download Photo</a>
+                        {% else %}
+                            <p>No photo available</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Bootstrap Modal -->
+                <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="photoModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="photoModalLabel">Request Item Photo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <img src="{{ form.instance.requestitem_photo.url }}" alt="Request Item Photo" style="width: 100%; height: auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    {% if role in 'group' or role in 'officer' or role in 'under_secretary' %}
+                        <button type="submit" name="action" value="forward" class="btn btn-primary">Forward</button>
+                        <button type="submit" name="action" value="edit" class="btn btn-primary">Edit & Forward</button>
+                        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+                    {% elif role == 'joint_secretary' %}
+                        <button type="submit" name="action" value="accept" class="btn btn-success">Accept</button>
+                        <button type="submit" name="action" value="edit_accept" class="btn btn-success">Edit & Accept</button>
+
+                        <button type="submit" name="action" value="reject" class="btn btn-danger">Reject</button>
+                    {% elif role == 'subgroup' %}
+
+
+                    {% endif %}
+                </div>
+                
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+{% endblock %}
+
+
+

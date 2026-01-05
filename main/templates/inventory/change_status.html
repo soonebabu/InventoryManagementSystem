@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-4" style="margin-bottom:200px;">
+        <div class="card" style="max-width: 700px; margin: 0 auto;">
+            <div class="card-header" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+                <h2 class="text-white text-center mb-0">CHANGE STATUS</h2>
+            </div>
+            <div class="card-body d-flex align-items-center">
+                <div class="mx-auto"> <!-- Center the content -->
+                    <div class="my-4"></div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'change_status' item.id %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="itemName" class="font-weight-bold text-primary h4 mb-3">Name of Item</label>
+                            <p id="itemName" class="form-control-plaintext bg-light p-3 rounded shadow-sm mb-4">
+                                <span class="text-primary">{{ item.name }}</span>
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemDescription" class="font-weight-bold text-primary h4 mb-3">Description of Item</label>
+                            <p id="itemDescription" class="form-control-plaintext bg-light p-3 rounded shadow-sm mb-4">
+                                <span class="text-primary">{{ item.description }}</span>
+                            </p>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="condition" class="font-weight-bold custom-form-label">Condition:</label>
+                            <div class="d-inline-block align-middle" style="width: 20px;"></div> <!-- Adjust width as needed -->
+                            {{ form.condition }}
+                        </div>
+                        
+                        <style>
+                            /* Adjust the width of the input field */
+                            .form-group input[type="text"] {
+                                width: 100%; /* Set the desired width */
+                                max-width: 200px; /* Set the maximum width if needed */
+                            }
+                            .form-group select {
+                                width: 100%; /* Set the desired width */
+                                max-width: 200px; /* Set the maximum width if needed */
+                            }
+                            
+                        </style>
+
+                        <div class="form-group mb-4">
+                            <label for="{{ form.changestatus_photo.id_for_label }}" class="font-weight-bold form-label">Photo/फोटो:</label>
+                            <div class="d-inline-block align-middle" style="width: 20px;"></div> <!-- Adjust width as needed -->
+
+                            {{ form.changestatus_photo }}
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="remarks" class="font-weight-bold custom-form-label">Remarks</label>
+                            <div class="d-inline-block align-middle" style="width: 20px;"></div> <!-- Adjust width as needed -->
+
+                            {{ form.remarks }}
+                            <small class="form-text text-muted">* Required</small>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Change Status</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

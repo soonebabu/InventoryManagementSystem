@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4" style="margin-bottom:200px;">
+    <div class="card text-white" style="background-color: #5bc0de; /* Custom color between sky blue and blue */">
+      <div class="card-body text-center">
+        <h2 class="card-title">Item Request List</h2>
+      </div>
+    </div>
+    <div style="margin-bottom: 20px;"></div>
+    <style>
+        .thead-custom {
+          background-color: #343a40; /* Dark background color */
+          color: #ffffff; /* Text color */
+          font-weight: bold; /* Bold text */
+        }
+      
+        .thead-custom th {
+          border: 1px solid #454d55; /* Border color */
+          padding: 10px; /* Adjust padding as needed */
+        }
+      </style>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-custom">
+            <tr>
+          <th>Item Name</th>
+          <th>Status</th>
+          <th>Dates</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item_request in item_requests %}
+        <tr class="item-row" data-item-id="{{ item_request.id }}">
+          <td>{{ item_request.item_name }}</td>
+          <td>
+            <ul class="list-unstyled">
+              {% if 'FSCMO' in user_group %}
+              <li>Subgroup: {{ item_request.status.subgroup }}</li>
+              <li>Group: {{ item_request.status.group }}</li>
+              <li>Officer: {{ item_request.status.officer }}</li>
+              <li>Under Secretary: {{ item_request.status.under_secretary }}</li>
+              <li>Joint Secretary: {{ item_request.status.joint_secretary }}</li>
+
+              {% elif 'JOINTSECRETARY' in user_group %}
+              <li>Subgroup: {{ item_request.status.subgroup }}</li>
+              <li>Group: {{ item_request.status.group }}</li>
+              <li>Officer: {{ item_request.status.officer }}</li>
+              <li>Under Secretary: {{ item_request.status.under_secretary }}</li>
+              {% elif 'UNDERSECRETARY' in user_group %}
+              <li>Subgroup: {{ item_request.status.subgroup }}</li>
+              <li>Group: {{ item_request.status.group }}</li>
+              <li>Officer: {{ item_request.status.officer }}</li>
+              {% elif 'OFFICER' in user_group %}
+              <li>Subgroup: {{ item_request.status.subgroup }}</li>
+              <li>Group: {{ item_request.status.group }}</li>
+              {% else %}
+              <li>Subgroup: {{ item_request.status.subgroup }}</li>
+              {% endif %}
+            </ul>
+          </td>
+
+          <td>
+            <ul class="list-unstyled">
+              {% if 'FSCMO' in user_group %}
+              <li>Subgroup: {{ item_request.dates.subgroup }}</li>
+              <li>Group: {{ item_request.dates.group }}</li>
+              <li>Officer: {{ item_request.dates.officer }}</li>
+              <li>Under Secretary: {{ item_request.dates.under_secretary }}</li>
+              <li>Joint Secretary: {{ item_request.dates.joint_secretary }}</li>
+              {% elif 'JOINTSECRETARY' in user_group %}
+              <li>Subgroup: {{ item_request.dates.subgroup }}</li>
+              <li>Group: {{ item_request.dates.group }}</li>
+              <li>Officer: {{ item_request.dates.officer }}</li>
+              <li>Under Secretary: {{ item_request.dates.under_secretary }}</li>
+              {% elif 'UNDERSECRETARY' in user_group %}
+              <li>Subgroup: {{ item_request.dates.subgroup }}</li>
+              <li>Group: {{ item_request.dates.group }}</li>
+              <li>Officer: {{ item_request.dates.officer }}</li>
+              {% elif 'OFFICER' in user_group %}
+              <li>Subgroup: {{ item_request.dates.subgroup }}</li>
+              <li>Group: {{ item_request.dates.group }}</li>
+              {% else %}
+              <li>Subgroup: {{ item_request.dates.subgroup }}</li>
+              {% endif %}
+            </ul>
+          </td>
+          <td>
+            <ul class="list-unstyled">
+                {% if 'FSCMO' in user_group %}
+                <li>Subgroup Quantity: {{ item_request.item_quantity.subgroup }}</li>
+                <li>Group Quantity: {{ item_request.item_quantity.group }}</li>
+                <li>Officer Quantity: {{ item_request.item_quantity.officer }}</li>
+                <li>Under Secretary Quantity: {{ item_request.item_quantity.under_secretary }}</li>
+                <li>Joint Secretary Quantity: {{ item_request.item_quantity.joint_secretary }}</li>
+                {% elif 'JOINTSECRETARY' in user_group %}
+                <li>Subgroup Quantity: {{ item_request.item_quantity.subgroup }}</li>
+                <li>Group Quantity: {{ item_request.item_quantity.group }}</li>
+                <li>Officer Quantity: {{ item_request.item_quantity.officer }}</li>
+                <li>Under Secretary Quantity: {{ item_request.item_quantity.under_secretary }}</li>
+                {% elif 'UNDERSECRETARY' in user_group %}
+                <li>Sub group Quantity: {{ item_request.item_quantity.subgroup }}</li>
+                <li>Group Quantity: {{ item_request.item_quantity.group }}</li>
+                <li>Officer Quantity: {{ item_request.item_quantity.officer }}</li>
+                {% elif 'OFFICER' in user_group %}
+                <li>Sub Group Quantity: {{ item_request.item_quantity.subgroup }}</li>
+                <li>Group Quantity: {{ item_request.item_quantity.group }}</li>
+                {% else %}
+                <li>Sub Group Quantity: {{ item_request.item_quantity.subgroup }}</li>
+                {% endif %}
+            </ul>
+        </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $(".item-row").click(function() {
+      var itemId = $(this).data("item-id");
+      window.location.href = "{% url 'process_request' 0 %}".replace("0", itemId);
+    });
+  });
+</script>
+{% endblock %}
+
+
+
+
+{% comment %} {% extends "base.html" %}
+{% block content %}
+<div class="container">
+  <h2 class="mt-4 mb-3">Item Request List</h2>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th>Item Name</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item_request in item_requests %}
+        <tr>
+          <td>{{ item_request.item_name }}</td>
+          <td>
+            <ul class="list-unstyled">
+              <li>Subgroup: {{ item_request.status.subgroup }}</li>
+              <li>Group: {{ item_request.status.group }}</li>
+              <li>Officer: {{ item_request.status.officer }}</li>
+              <li>Under Secretary: {{ item_request.status.under_secretary }}</li>
+              <li>Joint Secretary: {{ item_request.status.joint_secretary }}</li>
+            </ul>
+          </td>
+          <td>
+            {% if 'subgroup' in user_groups or 'group' in user_groups or 'officer' in user_groups or 'under_secretary' in user_groups or 'joint_secretary' in user_groups %}
+            <a href="{% url 'process_request' item_request.id %}" class="btn btn-primary btn-sm">Process</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+
+
+{% comment %} {% extends "base.html" %}
+{% block content %}
+  <h2>Item Request List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item_request in item_requests %}
+        <tr>
+          <td>{{ item_request.item_name }}</td>
+          <td>
+            Subgroup: {{ item_request.status.subgroup }}<br>
+            Group: {{ item_request.status.group }}<br>
+            Officer: {{ item_request.status.officer }}<br>
+            Under Secretary: {{ item_request.status.under_secretary }}<br>
+            Joint Secretary: {{ item_request.status.joint_secretary }}
+          </td>
+          <td>
+            {% if 'subgroup' in user_groups or 'group' in user_groups or 'officer' in user_groups or 'under_secretary' in user_groups or 'joint_secretary' in user_groups %}
+              <a href="{% url 'process_request' item_request.id %}">Process</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %} {% endcomment %} 

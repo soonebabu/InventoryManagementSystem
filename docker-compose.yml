@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: >
+      sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"
+
+    dns: 8.8.8.8  # Example DNS server (Google's public DNS)
+
+
+    container_name: inventorymanagementsystem
+
+    volumes:
+      - .:/inventorymanagementsystem
+      # Add this line to mount a volume for media files
+      - media_volume:/inventorymanagementsystem/media
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DEBUG=True
+      - DJANGO_DB_HOST=db
+      - DJANGO_DB_PORT=5432
+      - DJANGO_DB_NAME=inventorysystem
+      - DJANGO_DB_USER=postgres
+      - DJANGO_DB_PASSWORD=postgres
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=inventorysystem
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+     # - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Define volumes at the end
+volumes:
+  postgres_data:
+  media_volume:
+
+networks:
+  default:
+    driver: bridge

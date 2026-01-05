@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Include Chart.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment"></script>
+
+<!-- Main Start -->
+<main style="margin-bottom: 200px; margin-top:200px;">
+   
+    <script>
+        $(document).ready(function () {
+            $('#carouselExampleControls').carousel({
+                interval: 1000 // Adjust the interval (in milliseconds) for auto-sliding
+            });
+        });
+    </script>
+    
+
+    <section class="container my-4">
+        <div class="row justify-content-center">
+            {% if request.user.is_authenticated %}
+            
+                    
+                
+            {% with user_groups=request.user.groups.all %}
+
+
+
+
+
+
+            {% if user_group_name != 'SUPERADMIN' %}   
+            {% if user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY'%}               
+            
+            {% if user_group_name == 'FSCMO' %}
+                    <div class="col-md-4 mb-4 mx-auto">
+                        <div class="card">
+                            <i class="fas fa-plus-circle fa-3x text-orange mx-auto mt-3"></i>
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Add Item</h3>
+                                <p class="card-text">Add the item here.</p>
+                                <a href="{% url 'add_item' %}" class="btn btn-primary">Go to Add Item</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-4 mx-auto">
+                        <div class="card">
+                            <i class="fas fa-plus-circle fa-3x text-orange mx-auto mt-3"></i>
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Issue Goods</h3>
+                                <p class="card-text">Issue the items from here.</p>
+                                <a href="{% url 'add_item' %}" class="btn btn-primary">Go to Assign Item</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <i class="fas fa-shopping-basket fa-3x text-orange mx-auto mt-3"></i>
+                            <div class="card-body">
+                                <h3 class="card-title">Request New Item</h3>
+                                <p class="card-text">Request the Item to Admin</p>
+                                <a href="{% url 'request_item' %}" class="btn btn-primary">Go to Request Item</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %} {% comment %} {% if user_group_name and not user_subgroup_name %}{% endcomment %}
+
+                {% if user_group_name != 'FSCMO' %}
+
+                {% comment %} {% if user_subgroup_name %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <i class="fas fa-shopping-basket fa-3x text-orange mx-auto mt-3"></i>
+                        <div class="card-body">
+                            <h3 class="card-title">Request Item</h3>
+                            <p class="card-text">Request the Item to Admin</p>
+                            <a href="{% url 'request_item' %}" class="btn btn-primary">Go to Request Item</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}  {% endcomment %}
+
+                {% endif %} {% comment %}  % if user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY'%} {% endcomment %}
+                {% endif %} {% comment %}  {% if user_group_name != 'SUPERADMIN' %}{% endcomment %}
+
+                {% if not user_subgroup_name and user_group_name != 'SUPERADMIN' %}
+                   {%  if user_group_name == 'OFFICER' and user_group_name == 'UNDERSECRETARY' and user_group_name == 'JOINTSECRETARY'%}
+
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <i class="fas fa-shopping-cart fa-3x text-orange mx-auto mt-3"></i>
+                        <div class="card-body">
+                            <h3 class="card-title">Item Requests Received</h3>
+                            <p class="card-text">List of the Requested Items</p>
+                            <a href="{% url 'item_request_list' %}" class="btn btn-primary">Go to Item Requests Received</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %} {% comment %}  {%  if user_group_name = 'OFFICER' and user_group_name = 'UNDERSECRETARY' and user_group_name = 'JOINTSECRETARY'%} {% endcomment %}
+                {% endif %} {% comment %}  {% if not user_subgroup_name %} {% endcomment %}
+                {% endif %}
+
+                {% if not user_subgroup_name and user_group_name != 'SUPERADMIN' %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <i class="fas fa-shopping-cart fa-3x text-orange mx-auto mt-3"></i>
+                    <div class="card-body">
+                        <h3 class="card-title">Item Requests Received</h3>
+                        <p class="card-text">List of the Requested Items</p>
+                        <a href="{% url 'item_request_list' %}" class="btn btn-primary">Go to Item Requests Received</a>
+                    </div>
+                </div>
+            </div>
+{% endif %}
+
+        {% endwith %}
+        
+            {% endif %} {% comment %} {% endcomment %}
+            
+            {% if request.user.is_authenticated %}
+
+            {% if user_group_name != 'OFFICER' and user_group_name != 'UNDERSECRETARY' and user_group_name != 'JOINTSECRETARY'%}               
+
+
+            <div class="col-md-4 mb-4 mx-auto">
+                <div class="card">
+                    <i class="fas fa-list fa-3x text-orange mx-auto mt-3"></i>
+                    <div class="card-body text-center">
+                        <h3 class="card-title">Item List</h3>
+                        <p class="card-text">List out the items.</p>
+                        <a href="{% url 'item_list' %}" class="btn btn-primary">Go to Item List</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            {% comment %} {% if user_group_name != 'SUPERADMIN' or not user_subgroup_name %}
+
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <i class="fas fa-shopping-cart fa-3x text-orange mx-auto mt-3"></i>
+                    <div class="card-body">
+                        <h3 class="card-title">Item Requests Received</h3>
+                        <p class="card-text">List of the Requested Items</p>
+                        <a href="{% url 'item_request_list' %}" class="btn btn-primary">Go to Item Requests Received</a>
+                    </div>
+                </div>
+            </div>
+            {% endif %} {% endcomment %}
+
+        </div>
+    </section>
+    
+    
+
+</main>
+<link rel="stylesheet" type="text/css" href="{% static 'lightbox2-2.11.3/dist/css/lightbox.min.css' %}" />
+<script type="text/javascript" src="{% static 'lightbox2-2.11.3/dist/js/lightbox.min.js' %}"></script>
+
+{% endblock %}
